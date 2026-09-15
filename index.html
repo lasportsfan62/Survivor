@@ -1092,8 +1092,38 @@
             padding: 32px 16px;
         }
 
-        .scoring-card {
+                .scoring-card {
             padding: 32px 16px;
+        }
+
+        /* =========================
+           SCORING SYSTEM - MOBILE
+        ========================= */
+
+        .scoring-table-wrapper {
+            overflow-x: hidden;
+        }
+
+        .scoring-table {
+            width: 100%;
+            min-width: 0;
+            table-layout: fixed;
+        }
+
+        .scoring-table th,
+        .scoring-table td {
+            padding: 10px 6px;
+            font-size: 0.78rem;
+        }
+
+        .scoring-table th:first-child,
+        .scoring-table td:first-child {
+            width: 70%;
+        }
+
+        .scoring-table th:last-child,
+        .scoring-table td:last-child {
+            width: 30%;
         }
 
         .fire-button {
@@ -1117,41 +1147,6 @@
         }
     }
 
-
-        /* =========================
-           SCORING SYSTEM - MOBILE
-        ========================= */
-
-        .scoring-table-wrapper {
-            overflow-x: hidden;
-        }
-
-        .scoring-table {
-            width: 100%;
-            min-width: 0;
-            table-layout: fixed;
-        }
-
-        .scoring-table th,
-        .scoring-table td {
-            padding: 9px 5px;
-            font-size: 0.68rem;
-        }
-
-        .scoring-table th:first-child,
-        .scoring-table td:first-child {
-            width: 48%;
-        }
-
-        .scoring-table th:nth-child(2),
-        .scoring-table td:nth-child(2) {
-            width: 28%;
-        }
-
-        .scoring-table th:nth-child(3),
-        .scoring-table td:nth-child(3) {
-            width: 24%;
-        }
 </style>
 
 
