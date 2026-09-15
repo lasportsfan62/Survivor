@@ -780,21 +780,21 @@
     }
 
     .standings-table th {
-    padding: 14px 16px;
+        padding: 14px 16px;
 
-    background: #111;
+        background: #111;
 
-    color: var(--muted);
+        color: var(--muted);
 
-    font-size: 0.68rem;
-    font-weight: 800;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
 
-    border-bottom: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
 
-    text-align: center;
-}
+        text-align: center;
+    }
 
     .standings-table td {
         padding: 15px 16px;
@@ -815,11 +815,11 @@
         font-size: 1.4rem;
     }
 
-.standings-points {
-    text-align: center;
-    font-weight: 800;
-    color: var(--fire);
-}
+    .standings-points {
+        text-align: center;
+        font-weight: 800;
+        color: var(--fire);
+    }
 
     .hide-button {
         margin-top: 18px;
@@ -836,6 +836,148 @@
         border-color: #555;
 
         box-shadow: none;
+    }
+
+
+    /* ========================================
+       SCORING SYSTEM
+    ======================================== */
+
+    .scoring-card {
+        position: relative;
+
+        padding: 40px 25px;
+
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+
+        background: var(--section);
+
+        text-align: center;
+    }
+
+    .scoring-icon {
+        width: 55px;
+        height: 55px;
+
+        margin: 0 auto 15px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border: 1px solid rgba(255, 106, 0, 0.45);
+        border-radius: 50%;
+
+        color: var(--fire);
+
+        background: rgba(255, 106, 0, 0.08);
+
+        font-size: 1.2rem;
+    }
+
+    .scoring-title {
+        margin: 0;
+
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 2.1rem;
+        letter-spacing: 0.08em;
+    }
+
+    .scoring-description {
+        max-width: 500px;
+        margin: 5px auto 25px;
+
+        color: var(--muted);
+        font-size: 0.9rem;
+    }
+
+    .scoring-content {
+        display: none;
+        margin-top: 25px;
+
+        text-align: left;
+
+        animation: standingsReveal 0.45s ease forwards;
+    }
+
+    .scoring-content.visible {
+        display: block;
+    }
+
+    .scoring-table-wrapper {
+        overflow-x: auto;
+
+        border: 1px solid var(--border);
+        border-radius: 12px;
+    }
+
+    .scoring-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 500px;
+    }
+
+    .scoring-table th {
+        padding: 14px 16px;
+
+        background: #111;
+
+        color: var(--muted);
+
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+
+        border-bottom: 1px solid var(--border);
+
+        text-align: left;
+    }
+
+    .scoring-table th:last-child {
+        text-align: center;
+    }
+
+    .scoring-table td {
+        padding: 14px 16px;
+
+        border-bottom: 1px solid #282828;
+
+        font-size: 0.88rem;
+    }
+
+    .scoring-table tr:last-child td {
+        border-bottom: 0;
+    }
+
+    .scoring-category {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .scoring-category i {
+        width: 18px;
+
+        color: var(--fire);
+
+        text-align: center;
+    }
+
+    .scoring-points {
+        width: 110px;
+
+        color: var(--fire);
+
+        font-weight: 800;
+
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .scoring-negative {
+        color: var(--locked);
     }
 
 
@@ -879,14 +1021,14 @@
     }
 
     .footer-logo {
-    display: block;
-    width: 90px;
-    height: 90px;
-    object-fit: contain;
-    margin: 0 auto 18px;
-}
+        display: block;
+        width: 90px;
+        height: 90px;
+        object-fit: contain;
+        margin: 0 auto 18px;
+    }
 
-    
+
     /* ========================================
        RESPONSIVE
     ======================================== */
@@ -947,6 +1089,10 @@
         }
 
         .standings-card {
+            padding: 32px 16px;
+        }
+
+        .scoring-card {
             padding: 32px 16px;
         }
 
@@ -1137,16 +1283,16 @@
 
                         <thead>
 
-    <tr>
+                            <tr>
 
-        <th>Rank</th>
-        <th>Player</th>
-        <th>Points</th>
-        <th>Change</th>
+                                <th>Rank</th>
+                                <th>Player</th>
+                                <th>Points</th>
+                                <th>Change</th>
 
-    </tr>
+                            </tr>
 
-</thead>
+                        </thead>
 
                         <tbody id="standingsBody">
 
@@ -1171,6 +1317,259 @@
                     >
                         <i class="fa-solid fa-eye-slash"></i>
                         Hide Standings
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================
+         SCORING SYSTEM
+    ======================================== -->
+
+    <section class="section" id="scoring">
+
+        <div class="scoring-card">
+
+            <div class="scoring-icon">
+                <i class="fa-solid fa-calculator"></i>
+            </div>
+
+            <h2 class="scoring-title">
+                Scoring System
+            </h2>
+
+            <p class="scoring-description">
+                See how points are awarded throughout the game.
+            </p>
+
+            <button
+                class="fire-button"
+                id="revealScoring"
+                type="button"
+            >
+                <i class="fa-solid fa-list-ol"></i>
+                View Scoring System
+            </button>
+
+
+            <div
+                class="scoring-content"
+                id="scoringContent"
+            >
+
+                <div class="scoring-table-wrapper">
+
+                    <table class="scoring-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Category
+                                </th>
+
+                                <th>
+                                    Points
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td>
+                                    <div class="scoring-category">
+                                        <i class="fa-solid fa-sun"></i>
+                                        Days
+                                    </div>
+                                </td>
+
+                                <td class="scoring-points">
+                                    +1
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="scoring-category">
+                                        <i class="fa-solid fa-coins"></i>
+                                        Individual Reward
+                                    </div>
+                                </td>
+
+                                <td class="scoring-points">
+                                    +2
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="scoring-category">
+                                        <i class="fa-solid fa-shield-halved"></i>
+                                        Individual Immunity
+                                    </div>
+                                </td>
+
+                                <td class="scoring-points">
+                                    +5
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="scoring-category">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                        Advantage Found
+                                    </div>
+                                </td>
+
+                                <td class="scoring-points">
+                                    +1
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="scoring-category">
+                                        <i class="fa-solid fa-square-pen"></i>
+                                        Advantage Played
+                                    </div>
+                                </td>
+
+                                <td class="scoring-points">
+                                    +2
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="scoring-category">
+                                        <i class="fa-solid fa-people-group"></i>
+                                        Tribal Immunity
+                                    </div>
+                                </td>
+
+                                <td class="scoring-points">
+                                    +1
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="scoring-category">
+                                        <i class="fa-solid fa-film"></i>
+                                        Episode Title
+                                    </div>
+                                </td>
+
+                                <td class="scoring-points">
+                                    +1
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="scoring-category">
+                                        <i class="fa-solid fa-link"></i>
+                                        Merge
+                                    </div>
+                                </td>
+
+                                <td class="scoring-points">
+                                    +2
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="scoring-category">
+                                        <i class="fa-solid fa-ban"></i>
+                                        Didn't Vote
+                                    </div>
+                                </td>
+
+                                <td class="scoring-points scoring-negative">
+                                    -1
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="scoring-category">
+                                        <i class="fa-solid fa-circle-xmark"></i>
+                                        Votes Negated
+                                    </div>
+                                </td>
+
+                                <td class="scoring-points">
+                                    +1 per vote
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="scoring-category">
+                                        <i class="fa-solid fa-medal"></i>
+                                        3rd Place
+                                    </div>
+                                </td>
+
+                                <td class="scoring-points">
+                                    +10
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="scoring-category">
+                                        <i class="fa-solid fa-medal"></i>
+                                        2nd Place
+                                    </div>
+                                </td>
+
+                                <td class="scoring-points">
+                                    +15
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="scoring-category">
+                                        <i class="fa-solid fa-crown"></i>
+                                        Winner
+                                    </div>
+                                </td>
+
+                                <td class="scoring-points">
+                                    +25
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <div style="text-align:center;">
+
+                    <button
+                        class="fire-button hide-button"
+                        id="hideScoring"
+                        type="button"
+                    >
+                        <i class="fa-solid fa-eye-slash"></i>
+                        Hide Scoring System
                     </button>
 
                 </div>
@@ -1349,12 +1748,12 @@ const EPISODE_SCORES_CSV =
 
                 if (isAvailable) {
 
-    card.href =
-        "episodes/51episode" +
-        episode +
-        ".html";
+                    card.href =
+                        "episodes/51episode" +
+                        episode +
+                        ".html";
 
-}
+                }
 
                 card.innerHTML = `
 
@@ -1885,6 +2284,7 @@ async function loadStandings() {
             const previousRankMap =
                 new Map();
 
+
             previousPlayerData.forEach(
                 player => {
 
@@ -2085,6 +2485,44 @@ async function loadStandings() {
             standingsContent.classList.remove("visible");
 
             revealButton.style.display = "inline-flex";
+
+        }
+    );
+
+
+    /* ========================================
+       SCORING SYSTEM REVEAL
+    ======================================== */
+
+    const revealScoring =
+        document.getElementById("revealScoring");
+
+    const hideScoring =
+        document.getElementById("hideScoring");
+
+    const scoringContent =
+        document.getElementById("scoringContent");
+
+
+    revealScoring.addEventListener(
+        "click",
+        function () {
+
+            scoringContent.classList.add("visible");
+
+            revealScoring.style.display = "none";
+
+        }
+    );
+
+
+    hideScoring.addEventListener(
+        "click",
+        function () {
+
+            scoringContent.classList.remove("visible");
+
+            revealScoring.style.display = "inline-flex";
 
         }
     );
