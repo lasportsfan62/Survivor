@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Fantasy Survivor — Episode 5</title>
+
+<link rel="icon" type="image/png" href="../dp-logo.png">
+
+<link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+>
+
+<link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+>
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+>
+
+<link
+    rel="stylesheet"
+    href="../css/episode.css"
+>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     PAGE
+========================================================= -->
+
+<div class="page">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="episode-header">
+
+        <a
+            href="../index.html"
+            class="brand"
+        >
+
+            <i class="fa-solid fa-fire"></i>
+
+            <span>FANTASY SURVIVOR</span>
+
+        </a>
+
+
+        <div class="episode-label">
+
+            <span class="season-label">
+                SEASON 51
+            </span>
+
+            <h1 id="episodeTitle">
+                EPISODE 1
+            </h1>
+
+        </div>
+
+    </header>
+
+
+
+    <main>
+
+
+        <!-- =================================================
+             NOTES / HIGHLIGHTS
+        ================================================== -->
+
+        <section class="section">
+
+            <div class="section-heading">
+
+                <span class="section-kicker">
+                    EPISODE RECAP
+                </span>
+
+                <h2>
+                    NOTES &amp; HIGHLIGHTS
+                </h2>
+
+            </div>
+
+
+            <div
+                class="notes-card"
+                id="episodeNotes"
+            >
+
+                <div class="loading">
+
+                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+
+                    <span>Loading episode details...</span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- HIGHLIGHT CARDS -->
+
+            <div class="highlight-grid">
+
+
+                <!-- VOTED OUT -->
+
+                <div class="highlight-card voted-out">
+
+                    <div class="highlight-icon">
+
+                        <i class="fa-solid fa-person-circle-minus"></i>
+
+                    </div>
+
+                    <div class="highlight-label">
+                        VOTED OUT
+                    </div>
+
+                    <div
+                        class="highlight-value"
+                        id="votedOut"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+
+
+                <!-- TOP SCORER -->
+
+                <div class="highlight-card top-scorer">
+
+                    <div class="highlight-icon">
+
+                        <i class="fa-solid fa-fire"></i>
+
+                    </div>
+
+                    <div class="highlight-label">
+                        TOP SCORER
+                    </div>
+
+                    <div
+                        class="highlight-value"
+                        id="topScorer"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+
+
+                <!-- TEAM ELIMINATED -->
+
+                <div class="highlight-card team-eliminated">
+
+                    <div class="highlight-icon">
+
+                        <i class="fa-solid fa-user-group"></i>
+
+                    </div>
+
+                    <div class="highlight-label">
+                        PLAYER TEAM ELIMINATED
+                    </div>
+
+                    <div
+                        class="highlight-value"
+                        id="teamEliminated"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             PLAYER SCOREBOARD
+        ================================================== -->
+
+        <section class="section">
+
+            <div class="section-heading">
+
+                <span class="section-kicker">
+                    FANTASY PLAYERS
+                </span>
+
+                <h2>
+                    PLAYER SCOREBOARD
+                </h2>
+
+                <p>
+                    Click a Player to view their five Contestants.
+                </p>
+
+            </div>
+
+
+            <div
+                class="scoreboard"
+                id="playerScoreboard"
+            >
+
+                <div class="loading">
+
+                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+
+                    <span>Loading player standings...</span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             CONTESTANT LEADERBOARD
+        ================================================== -->
+
+        <section class="section">
+
+            <div class="section-heading">
+
+                <span class="section-kicker">
+                    CONTESTANT PERFORMANCE
+                </span>
+
+                <h2>
+                    CONTESTANT LEADERBOARD
+                </h2>
+
+                <p>
+                    Click a Contestant to see how they scored.
+                </p>
+
+            </div>
+
+
+            <div
+                class="contestant-board"
+                id="contestantLeaderboard"
+            >
+
+                <div class="loading">
+
+                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+
+                    <span>Loading contestant scores...</span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             NAVIGATION
+        ================================================== -->
+
+        <section class="episode-navigation">
+
+
+            <a
+                id="previousEpisode"
+                class="episode-nav-button disabled"
+                href="#"
+                aria-disabled="true"
+            >
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                <span>
+
+                    <small>
+                        PREVIOUS
+                    </small>
+
+                    EPISODE
+
+                </span>
+
+            </a>
+
+
+
+            <a
+                href="../index.html"
+                class="home-nav-button"
+            >
+
+                <i class="fa-solid fa-fire"></i>
+
+                <span>
+                    FANTASY SURVIVOR HOME
+                </span>
+
+            </a>
+
+
+
+            <a
+                id="nextEpisode"
+                class="episode-nav-button"
+                href="#"
+            >
+
+                <span>
+
+                    <small>
+                        NEXT
+                    </small>
+
+                    EPISODE
+
+                </span>
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </a>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer>
+
+        <img
+            src="../dp-logo.png"
+            alt="DP Games"
+            class="footer-logo"
+        >
+
+        <div class="footer-title">
+            DP GAMES
+        </div>
+
+        <div class="footer-subtitle">
+            Fantasy Survivor · SEASON 51
+        </div>
+
+        <div class="footer-copy">
+            © 2026 DP Games
+        </div>
+
+    </footer>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+
+/* =========================================================
+   GOOGLE SHEET SOURCES
+========================================================= */
+
+const DATA_URLS = {
+
+    players:
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUpaol1_8lp3XxI91AcW8_YjDJqFYFGxXKu2EIldUwfTTz625fF5DbijZUbSLthBAYfqQuuUg-8CPG/pub?gid=851424025&single=true&output=csv",
+
+    contestants:
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUpaol1_8lp3XxI91AcW8_YjDJqFYFGxXKu2EIldUwfTTz625fF5DbijZUbSLthBAYfqQuuUg-8CPG/pub?gid=594841589&single=true&output=csv",
+
+    episodes:
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUpaol1_8lp3XxI91AcW8_YjDJqFYFGxXKu2EIldUwfTTz625fF5DbijZUbSLthBAYfqQuuUg-8CPG/pub?gid=283451397&single=true&output=csv",
+
+    episodeScores:
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUpaol1_8lp3XxI91AcW8_YjDJqFYFGxXKu2EIldUwfTTz625fF5DbijZUbSLthBAYfqQuuUg-8CPG/pub?gid=844815995&single=true&output=csv",
+
+    standings:
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUpaol1_8lp3XxI91AcW8_YjDJqFYFGxXKu2EIldUwfTTz625fF5DbijZUbSLthBAYfqQuuUg-8CPG/pub?gid=1890815031&single=true&output=csv",
+
+    episodeDetails:
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUpaol1_8lp3XxI91AcW8_YjDJqFYFGxXKu2EIldUwfTTz625fF5DbijZUbSLthBAYfqQuuUg-8CPG/pub?gid=79551146&single=true&output=csv"
+
+};
+
+
+
+/* =========================================================
+   DETERMINE EPISODE NUMBER FROM FILE NAME
+========================================================= */
+
+const fileName =
+    window.location.pathname
+        .split("/")
+        .pop();
+
+const episodeMatch =
+    fileName.match(/51episode(\d+)/i);
+
+const episodeNumber =
+    episodeMatch
+        ? Number(episodeMatch[1])
+        : 2;
+
+
+
+document.getElementById("episodeTitle").textContent =
+    "EPISODE " + episodeNumber;
+
+
+
+/* =========================================================
+   CSV PARSER
+========================================================= */
+
+function parseCSV(text) {
+
+    const rows = [];
+
+    let row = [];
+
+    let value = "";
+
+    let insideQuotes = false;
+
+
+    for (let i = 0; i < text.length; i++) {
+
+        const character = text[i];
+
+        const nextCharacter = text[i + 1];
+
+
+        if (character === '"' && insideQuotes && nextCharacter === '"') {
+
+            value += '"';
+
+            i++;
+
+            continue;
+
+        }
+
+
+        if (character === '"') {
+
+            insideQuotes = !insideQuotes;
+
+            continue;
+
+        }
+
+
+        if (character === "," && !insideQuotes) {
+
+            row.push(value);
+
+            value = "";
+
+            continue;
+
+        }
+
+
+        if (
+            (character === "\n" || character === "\r") &&
+            !insideQuotes
+        ) {
+
+            if (character === "\r" && nextCharacter === "\n") {
+
+                i++;
+
+            }
+
+            row.push(value);
+
+            rows.push(row);
+
+            row = [];
+
+            value = "";
+
+            continue;
+
+        }
+
+
+        value += character;
+
+    }
+
+
+    if (value !== "" || row.length > 0) {
+
+        row.push(value);
+
+        rows.push(row);
+
+    }
+
+
+    if (!rows.length) {
+        return [];
+    }
+
+
+    const headers =
+        rows[0].map(header =>
+            header.trim()
+        );
+
+
+    return rows
+        .slice(1)
+        .filter(row =>
+            row.some(cell => cell.trim() !== "")
+        )
+        .map(row => {
+
+            const object = {};
+
+            headers.forEach((header, index) => {
+
+                object[header] =
+                    (row[index] || "").trim();
+
+            });
+
+            return object;
+
+        });
+
+}
+
+
+
+/* =========================================================
+   FETCH CSV
+========================================================= */
+
+async function fetchCSV(url) {
+
+    try {
+
+        const response =
+            await fetch(url);
+
+        if (!response.ok) {
+
+            throw new Error(
+                "HTTP " + response.status
+            );
+
+        }
+
+        const text =
+            await response.text();
+
+        return parseCSV(text);
+
+    } catch (error) {
+
+        console.error(
+            "FAILED TO LOAD CSV:",
+            url,
+            error
+        );
+
+        throw error;
+
+    }
+
+}
+
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function number(value) {
+
+    if (
+        value === undefined ||
+        value === null ||
+        value === ""
+    ) {
+
+        return 0;
+
+    }
+
+    const result =
+        Number(
+            String(value)
+                .replace(/,/g, "")
+                .trim()
+        );
+
+    return Number.isFinite(result)
+        ? result
+        : 0;
+
+}
+
+
+
+function escapeHTML(value) {
+
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+
+function formatPoints(value) {
+
+    const points = number(value);
+
+    if (points > 0) {
+
+        return "+" + points;
+
+    }
+
+    return String(points);
+
+}
+
+
+
+function movementClass(value) {
+
+    const change = number(value);
+
+    if (change > 0) {
+        return "rank-up";
+    }
+
+    if (change < 0) {
+        return "rank-down";
+    }
+
+    return "rank-same";
+
+}
+
+
+
+function movementIcon(value) {
+
+    const change = number(value);
+
+    if (change > 0) {
+
+        return `
+            <i class="fa-solid fa-arrow-up"></i>
+            ${Math.abs(change)}
+        `;
+
+    }
+
+    if (change < 0) {
+
+        return `
+            <i class="fa-solid fa-arrow-down"></i>
+            ${Math.abs(change)}
+        `;
+
+    }
+
+    return `
+        <i class="fa-solid fa-minus"></i>
+    `;
+
+}
+
+
+
+/* =========================================================
+   SCORING BREAKDOWN
+========================================================= */
+
+const SCORE_CATEGORIES = [
+
+    {
+        column: "Days",
+        label: "Days",
+        icon: "fa-solid fa-sun",
+        multiplier: 1
+    },
+
+    {
+        column: "Individual Reward",
+        label: "Individual Reward",
+        icon: "fa-solid fa-coins",
+        multiplier: 2
+    },
+
+    {
+        column: "Individual Immunity",
+        label: "Individual Immunity",
+        icon: "fa-solid fa-shield-halved",
+        multiplier: 5
+    },
+
+    {
+        column: "Adv. Found",
+        label: "Advantage Found",
+        icon: "fa-solid fa-magnifying-glass",
+        multiplier: 1
+    },
+
+    {
+        column: "Adv. Played",
+        label: "Advantage Played",
+        icon: "fa-solid fa-square-pen",
+        multiplier: 2
+    },
+
+    {
+        column: "Tribal Immunity",
+        label: "Tribal Immunity",
+        icon: "fa-solid fa-people-group",
+        multiplier: 1
+    },
+
+    {
+        column: "Episode Title",
+        label: "Episode Title",
+        icon: "fa-solid fa-film",
+        multiplier: 1
+    },
+
+    {
+        column: "Merge",
+        label: "Merge",
+        icon: "fa-solid fa-link",
+        multiplier: 1
+    },
+
+    {
+        column: "Didn't Vote",
+        label: "Didn't Vote",
+        icon: "fa-solid fa-ban",
+        multiplier: -1
+    },
+
+    {
+        column: "Votes Negated",
+        label: "Votes Negated",
+        icon: "fa-solid fa-circle-xmark",
+        multiplier: 1
+    },
+
+    {
+        column: "3rd",
+        label: "3rd Place",
+        icon: "fa-solid fa-medal",
+        multiplier: 1
+    },
+
+    {
+        column: "2nd",
+        label: "2nd Place",
+        icon: "fa-solid fa-medal",
+        multiplier: 1
+    },
+
+    {
+        column: "Winner",
+        label: "Winner",
+        icon: "fa-solid fa-crown",
+        multiplier: 1
+    }
+
+];
+
+
+
+function createBreakdown(score) {
+
+    const items = [];
+
+
+    SCORE_CATEGORIES.forEach(category => {
+
+        const rawValue =
+            number(score[category.column]);
+
+
+        if (rawValue === 0) {
+            return;
+        }
+
+
+        let points =
+            rawValue * category.multiplier;
+
+
+items.push({
+
+    label: category.label,
+
+    icon: category.icon,
+
+    points: points
+
+});
+
+    });
+
+
+    return items;
+
+}
+
+
+
+/* =========================================================
+   LOAD EPISODE DETAILS
+========================================================= */
+
+async function loadEpisodeDetails() {
+
+    const details =
+        await fetchCSV(
+            DATA_URLS.episodeDetails
+        );
+
+
+    const detail =
+        details.find(row =>
+            number(row.Episode) === episodeNumber
+        );
+
+
+    if (!detail) {
+
+        document.getElementById(
+            "episodeNotes"
+        ).innerHTML = `
+
+            <div class="empty-state">
+
+                <i class="fa-solid fa-circle-info"></i>
+
+                <span>
+                    Episode details are not available yet.
+                </span>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const notes =
+        detail.Notes || "";
+
+
+    document.getElementById(
+        "episodeNotes"
+    ).innerHTML = notes
+        ? `
+            <div class="notes-icon">
+                <i class="fa-solid fa-note-sticky"></i>
+            </div>
+
+            <div class="notes-content">
+
+                <div class="notes-label">
+                    EPISODE NOTES
+                </div>
+
+                <div class="notes-text">
+                    ${escapeHTML(notes)}
+                </div>
+
+            </div>
+        `
+        : `
+            <div class="empty-state">
+                <i class="fa-solid fa-note-sticky"></i>
+                <span>No episode notes have been added yet.</span>
+            </div>
+        `;
+
+
+    document.getElementById("votedOut").textContent =
+        detail["Voted Out"] || "—";
+
+
+    document.getElementById("topScorer").textContent =
+        "—";
+
+
+    document.getElementById("teamEliminated").textContent =
+        detail["Team Eliminated"] || "—";
+
+}
+
+/* =========================================================
+   CALCULATE TOP SCORER
+========================================================= */
+
+function calculateTopScorer(
+    players,
+    episodeScores
+) {
+
+    const playerData =
+        players
+            .filter(player => player.Name)
+            .map(player => {
+
+                const picks = [
+                    player["1"],
+                    player["2"],
+                    player["3"],
+                    player["4"],
+                    player["5"]
+                ].filter(Boolean);
+
+
+                const episodePoints =
+                    episodeScores
+                        .filter(row =>
+                            number(row.Episode) === episodeNumber &&
+                            picks.includes(row.Contestant)
+                        )
+                        .reduce(
+                            (total, row) =>
+                                total +
+                                number(row["Total Points"]),
+                            0
+                        );
+
+
+                return {
+
+                    name:
+                        player.Name,
+
+                    episodePoints:
+                        episodePoints
+
+                };
+
+            });
+
+
+    if (!playerData.length) {
+
+        document.getElementById(
+            "topScorer"
+        ).textContent = "—";
+
+        return;
+
+    }
+
+
+    playerData.sort((a, b) =>
+        b.episodePoints -
+        a.episodePoints
+    );
+
+
+    const topScorer =
+        playerData[0];
+
+
+    if (!topScorer || topScorer.episodePoints === 0) {
+
+        document.getElementById(
+            "topScorer"
+        ).textContent = "—";
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "topScorer"
+    ).textContent =
+        `${topScorer.name} ${formatPoints(
+            topScorer.episodePoints
+        )}`;
+
+}
+
+
+/* =========================================================
+   LOAD PLAYER SCOREBOARD
+========================================================= */
+
+async function loadPlayerScoreboard(
+    players,
+    episodeScores
+) {
+
+    const board =
+        document.getElementById(
+            "playerScoreboard"
+        );
+
+
+    /*
+       Calculate each Player's points from
+       the five Contestants they drafted.
+    */
+
+    const playerData =
+        players
+            .filter(player => player.Name)
+            .map(player => {
+
+                const picks = [
+                    player["1"],
+                    player["2"],
+                    player["3"],
+                    player["4"],
+                    player["5"]
+                ].filter(Boolean);
+
+
+                const episodePoints =
+                    episodeScores
+                        .filter(row =>
+                            number(row.Episode) === episodeNumber &&
+                            picks.includes(row.Contestant)
+                        )
+                        .reduce(
+                            (total, row) =>
+                                total +
+                                number(row["Total Points"]),
+                            0
+                        );
+
+
+                const totalPoints =
+                    episodeScores
+                        .filter(row =>
+                            number(row.Episode) <= episodeNumber &&
+                            picks.includes(row.Contestant)
+                        )
+                        .reduce(
+                            (total, row) =>
+                                total +
+                                number(row["Total Points"]),
+                            0
+                        );
+
+
+                return {
+
+                    name:
+                        player.Name,
+
+                    picks:
+                        picks,
+
+                    episodePoints:
+                        episodePoints,
+
+                    totalPoints:
+                        totalPoints
+
+                };
+
+            });
+
+
+    /*
+       Rank Players by cumulative points.
+       Ties receive the same rank.
+    */
+
+    playerData.sort((a, b) => {
+
+        if (b.totalPoints !== a.totalPoints) {
+
+            return b.totalPoints -
+                a.totalPoints;
+
+        }
+
+        return a.name.localeCompare(
+            b.name
+        );
+
+    });
+
+
+    playerData.forEach((player, index) => {
+
+        if (
+            index > 0 &&
+            player.totalPoints ===
+            playerData[index - 1].totalPoints
+        ) {
+
+            player.rank =
+                playerData[index - 1].rank;
+
+        } else {
+
+            player.rank =
+                index + 1;
+
+        }
+
+    });
+
+
+    /*
+       Calculate previous rankings for Episode 2+.
+       Episode 1 has no previous rank.
+    */
+
+    let previousRankings = {};
+
+
+    if (episodeNumber > 1) {
+
+        const previousPlayerData =
+            players
+                .filter(player => player.Name)
+                .map(player => {
+
+                    const picks = [
+                        player["1"],
+                        player["2"],
+                        player["3"],
+                        player["4"],
+                        player["5"]
+                    ].filter(Boolean);
+
+
+                    const totalPoints =
+                        episodeScores
+                            .filter(row =>
+                                number(row.Episode) <
+                                episodeNumber &&
+                                picks.includes(row.Contestant)
+                            )
+                            .reduce(
+                                (total, row) =>
+                                    total +
+                                    number(row["Total Points"]),
+                                0
+                            );
+
+
+                    return {
+
+                        name:
+                            player.Name,
+
+                        totalPoints:
+                            totalPoints
+
+                    };
+
+                });
+
+
+        previousPlayerData.sort((a, b) => {
+
+            if (
+                b.totalPoints !==
+                a.totalPoints
+            ) {
+
+                return b.totalPoints -
+                    a.totalPoints;
+
+            }
+
+            return a.name.localeCompare(
+                b.name
+            );
+
+        });
+
+
+        previousPlayerData.forEach(
+            (player, index) => {
+
+                if (
+                    index > 0 &&
+                    player.totalPoints ===
+                    previousPlayerData[
+                        index - 1
+                    ].totalPoints
+                ) {
+
+                    player.rank =
+                        previousPlayerData[
+                            index - 1
+                        ].rank;
+
+                } else {
+
+                    player.rank =
+                        index + 1;
+
+                }
+
+                previousRankings[
+                    player.name
+                ] =
+                    player.rank;
+
+            }
+        );
+
+    }
+
+
+    if (!playerData.length) {
+
+        board.innerHTML = `
+
+            <div class="empty-state">
+
+                <i class="fa-solid fa-users"></i>
+
+                <span>
+                    Player standings will appear after the draft.
+                </span>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    board.innerHTML =
+        playerData
+            .map((player, index) => {
+
+                const previousRank =
+                    previousRankings[
+                        player.name
+                    ];
+
+
+                const rankChange =
+                    previousRank
+                    ? previousRank -
+                        player.rank
+                    : 0;
+
+
+                const teamHTML =
+    player.picks.length
+    ? player.picks.map(
+        contestant => {
+
+            const contestantTotalPoints =
+                episodeScores
+                    .filter(row =>
+                        number(row.Episode) <= episodeNumber &&
+                        row.Contestant === contestant
+                    )
+                    .reduce(
+                        (total, row) =>
+                            total +
+                            number(row["Total Points"]),
+                        0
+                    );
+
+
+            return `
+
+                <div class="team-contestant">
+
+                    <span class="team-contestant-name">
+
+                        <i class="fa-solid fa-user"></i>
+
+                        ${escapeHTML(
+                            contestant
+                        )}
+
+                    </span>
+
+                    <strong class="team-contestant-points">
+
+                        ${contestantTotalPoints}
+
+                    </strong>
+
+                </div>
+
+            `;
+
+        }
+    ).join("")
+                    : `
+
+                        <div class="team-empty">
+
+                            <i class="fa-solid fa-users"></i>
+
+                            Picks have not been entered yet.
+
+                        </div>
+
+                    `;
+
+
+                return `
+
+                    <div
+                        class="player-row"
+                        data-player-row="${index}"
+                    >
+
+                        <button
+                            class="player-main"
+                            type="button"
+                            aria-expanded="false"
+                            onclick="togglePlayer(${index})"
+                        >
+
+                            <span class="player-rank">
+                                ${player.rank}
+                            </span>
+
+
+                            <span class="player-name">
+                                ${escapeHTML(
+                                    player.name
+                                )}
+                            </span>
+
+
+                            <span class="player-episode-points">
+                                ${formatPoints(
+                                    player.episodePoints
+                                )}
+                            </span>
+
+
+                            <span class="player-total-points">
+                                ${player.totalPoints}
+                            </span>
+
+
+                            <span
+                                class="player-rank-change ${
+                                    movementClass(
+                                        rankChange
+                                    )
+                                }"
+                            >
+
+                                ${
+                                    previousRank
+                                    ? movementIcon(
+                                        rankChange
+                                    )
+                                    : "—"
+                                }
+
+                            </span>
+
+
+                            <span class="expand-icon">
+
+                                <i class="fa-solid fa-chevron-down"></i>
+
+                            </span>
+
+                        </button>
+
+
+                        <div
+                            class="player-team"
+                            id="player-team-${index}"
+                        >
+
+                            <div class="team-heading">
+
+                                <span>
+
+                                    <i class="fa-solid fa-users"></i>
+
+                                    ${escapeHTML(
+                                        player.name
+                                    )}'s Team
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="team-grid">
+
+                                ${teamHTML}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            })
+            .join("");
+
+}
+
+
+
+/* =========================================================
+   PLAYER DROPDOWN
+========================================================= */
+
+function togglePlayer(index) {
+
+    const row =
+        document.querySelector(
+            `[data-player-row="${index}"]`
+        );
+
+
+    const button =
+        row.querySelector(
+            ".player-main"
+        );
+
+
+    const team =
+        document.getElementById(
+            `player-team-${index}`
+        );
+
+
+    const isOpen =
+        row.classList.contains("expanded");
+
+
+    if (isOpen) {
+
+        row.classList.remove("expanded");
+
+        button.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+        team.style.maxHeight = "0px";
+
+    } else {
+
+        row.classList.add("expanded");
+
+        button.setAttribute(
+            "aria-expanded",
+            "true"
+        );
+
+        team.style.maxHeight =
+            team.scrollHeight + "px";
+
+    }
+
+}
+
+
+
+/* =========================================================
+   LOAD CONTESTANT LEADERBOARD
+========================================================= */
+
+async function loadContestantLeaderboard(
+    contestants,
+    scores
+) {
+
+
+    const board =
+        document.getElementById(
+            "contestantLeaderboard"
+        );
+
+
+    const relevantScores =
+        scores.filter(row =>
+            number(row.Episode) <= episodeNumber
+        );
+
+
+    const currentEpisodeScores =
+        scores.filter(row =>
+            number(row.Episode) === episodeNumber
+        );
+
+
+    const contestantData =
+        contestants.map(contestant => {
+
+            const name =
+                contestant.Contestant;
+
+
+            const episodeScore =
+                currentEpisodeScores.find(row =>
+                    row.Contestant === name
+                );
+
+
+            const totalPoints =
+                relevantScores
+                    .filter(row =>
+                        row.Contestant === name
+                    )
+                    .reduce(
+                        (total, row) =>
+                            total +
+                            number(row["Total Points"]),
+                        0
+                    );
+
+
+            return {
+
+                name: name,
+
+                episodePoints:
+                    episodeScore
+                        ? number(
+                            episodeScore["Total Points"]
+                        )
+                        : 0,
+
+                totalPoints:
+                    totalPoints,
+
+                score:
+                    episodeScore || {}
+
+            };
+
+        });
+
+
+    contestantData.sort((a, b) =>
+        b.totalPoints -
+        a.totalPoints
+    );
+
+
+    if (!contestantData.length) {
+
+        board.innerHTML = `
+
+            <div class="empty-state">
+
+                <i class="fa-solid fa-user-group"></i>
+
+                <span>
+                    Contestant scores are not available yet.
+                </span>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    board.innerHTML =
+        contestantData
+            .map((contestant, index) => {
+
+                const breakdown =
+                    createBreakdown(
+                        contestant.score
+                    );
+
+
+                const breakdownHTML =
+                    breakdown.length
+                    ? breakdown.map(item => `
+
+    <div class="breakdown-item">
+
+        <span>
+
+            <i class="${item.icon}"></i>
+
+            ${escapeHTML(item.label)}
+
+        </span>
+
+        <strong class="${
+            item.points < 0
+            ? "negative"
+            : ""
+        }">
+
+            ${formatPoints(item.points)}
+
+        </strong>
+
+    </div>
+
+`).join("")
+                    : `
+
+                        <div class="breakdown-empty">
+
+                            No scoring events recorded.
+
+                        </div>
+
+                    `;
+
+
+                return `
+
+                    <div
+                        class="contestant-row"
+                        data-contestant-row="${index}"
+                    >
+
+                        <button
+                            class="contestant-main"
+                            type="button"
+                            aria-expanded="false"
+                            onclick="toggleContestant(${index})"
+                        >
+
+                            <span class="contestant-rank">
+                                ${index + 1}
+                            </span>
+
+
+                            <span class="contestant-name">
+                                ${escapeHTML(contestant.name)}
+                            </span>
+
+
+                            <span class="contestant-episode">
+
+                                ${formatPoints(
+                                    contestant.episodePoints
+                                )}
+
+                            </span>
+
+
+                            <span class="contestant-total">
+
+                                ${contestant.totalPoints}
+
+                            </span>
+
+
+                            <span class="expand-icon">
+
+                                <i class="fa-solid fa-chevron-down"></i>
+
+                            </span>
+
+                        </button>
+
+
+                        <div
+                            class="contestant-details"
+                            id="contestant-details-${index}"
+                        >
+
+                            <div class="contestant-detail-inner">
+
+
+                                <div class="detail-heading">
+
+                                    <span>
+                                        <i class="fa-solid fa-chart-column"></i>
+                                        EPISODE ${episodeNumber} BREAKDOWN
+                                    </span>
+
+                                </div>
+
+
+                                <div class="breakdown-list">
+
+                                    ${breakdownHTML}
+
+                                </div>
+
+
+                                <div class="detail-total">
+
+                                    <span>
+                                        Episode Score
+                                    </span>
+
+                                    <strong>
+
+                                        ${formatPoints(
+                                            contestant.episodePoints
+                                        )}
+
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="detail-total cumulative">
+
+                                    <span>
+                                        Total Points Through Episode ${episodeNumber}
+                                    </span>
+
+                                    <strong>
+
+                                        ${contestant.totalPoints}
+
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            })
+            .join("");
+
+}
+
+
+
+/* =========================================================
+   CONTESTANT DROPDOWN
+========================================================= */
+
+function toggleContestant(index) {
+
+    const row =
+        document.querySelector(
+            `[data-contestant-row="${index}"]`
+        );
+
+
+    const button =
+        row.querySelector(
+            ".contestant-main"
+        );
+
+
+    const details =
+        document.getElementById(
+            `contestant-details-${index}`
+        );
+
+
+    const isOpen =
+        row.classList.contains("expanded");
+
+
+    if (isOpen) {
+
+        row.classList.remove("expanded");
+
+        button.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+        details.style.maxHeight = "0px";
+
+    } else {
+
+        row.classList.add("expanded");
+
+        button.setAttribute(
+            "aria-expanded",
+            "true"
+        );
+
+        details.style.maxHeight =
+            details.scrollHeight + "px";
+
+    }
+
+}
+
+
+
+/* =========================================================
+   EPISODE NAVIGATION
+========================================================= */
+
+async function setupNavigation(episodes) {
+
+    const previous =
+        document.getElementById(
+            "previousEpisode"
+        );
+
+    const next =
+        document.getElementById(
+            "nextEpisode"
+        );
+
+
+    if (episodeNumber > 1) {
+
+        previous.classList.remove("disabled");
+
+        previous.removeAttribute(
+            "aria-disabled"
+        );
+
+        previous.href =
+            `51episode${episodeNumber - 1}.html`;
+
+    }
+
+
+    const nextEpisodeNumber =
+        episodeNumber + 1;
+
+
+    const nextEpisode =
+        episodes.find(row =>
+            number(row.Episode) ===
+            nextEpisodeNumber
+        );
+
+
+    if (
+        nextEpisode &&
+        (
+            nextEpisode.Status === "Complete"
+        )
+    ) {
+
+        next.href =
+            `51episode${nextEpisodeNumber}.html`;
+
+        next.classList.remove("disabled");
+
+    } else {
+
+        next.classList.add("disabled");
+
+        next.setAttribute(
+            "aria-disabled",
+            "true"
+        );
+
+        next.removeAttribute("href");
+
+    }
+
+}
+
+
+
+/* =========================================================
+   ERROR DISPLAY
+========================================================= */
+
+function showError(message) {
+
+    const containers = [
+
+        "episodeNotes",
+        "playerScoreboard",
+        "contestantLeaderboard"
+
+    ];
+
+
+    containers.forEach(id => {
+
+        const element =
+            document.getElementById(id);
+
+
+        if (
+            element &&
+            element.querySelector(".loading")
+        ) {
+
+            element.innerHTML = `
+
+                <div class="error-state">
+
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+
+                    <span>
+                        ${escapeHTML(message)}
+                    </span>
+
+                </div>
+
+            `;
+
+        }
+
+    });
+
+}
+
+
+
+/* =========================================================
+   INITIALIZE PAGE
+========================================================= */
+
+async function initializeEpisodePage() {
+
+    try {
+
+
+        const [
+
+            players,
+            contestants,
+            episodes,
+            episodeScores,
+            
+        ] = await Promise.all([
+
+            fetchCSV(DATA_URLS.players),
+
+            fetchCSV(DATA_URLS.contestants),
+
+            fetchCSV(DATA_URLS.episodes),
+
+            fetchCSV(DATA_URLS.episodeScores),
+
+    ]);
+
+
+        await loadEpisodeDetails();
+
+
+await loadPlayerScoreboard(
+    players,
+    episodeScores
+);
+
+
+calculateTopScorer(
+    players,
+    episodeScores
+);
+
+
+await loadContestantLeaderboard(
+    contestants,
+    episodeScores
+);
+
+
+        await setupNavigation(
+            episodes
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showError(
+            "There was a problem loading the episode data. Please try again."
+        );
+
+    }
+
+}
+
+
+initializeEpisodePage();
+
+
+</script>
+
+
+</body>
+
+</html>
