@@ -961,7 +961,7 @@ async function loadEpisodeDetails() {
                 </div>
 
                 <div class="notes-text">
-                    ${escapeHTML(notes)}
+                    ${escapeHTML(notes).replace(/\r?\n/g, "<br>")}
                 </div>
 
             </div>
