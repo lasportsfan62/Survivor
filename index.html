@@ -15,7 +15,8 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
+
 <title>Fantasy Survivor | Survivor 51 Fantasy Game</title>
 
 <link rel="icon" type="image/png" href="dp-logo.png">
@@ -70,6 +71,51 @@
 
 .rank-same {
     color: #A8A8A8;
+}
+
+
+/* =========================
+   STANDINGS GROUP FILTER
+========================= */
+
+.standings-filter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 25px auto;
+}
+
+.standings-filter-label {
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.standings-filter-select {
+    min-width: 180px;
+    min-height: 42px;
+    padding: 0 38px 0 14px;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    background: #111;
+    color: var(--text);
+
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 700;
+
+    cursor: pointer;
+    outline: none;
+}
+
+.standings-filter-select:focus {
+    border-color: var(--fire);
+    box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.12);
 }
 
 
@@ -1102,7 +1148,7 @@
             padding: 32px 16px;
         }
 
-                .scoring-card {
+        .scoring-card {
             padding: 32px 16px;
         }
 
@@ -1174,6 +1220,21 @@
         .scoring-table th:last-child,
         .scoring-table td:last-child {
             width: 30%;
+        }
+
+        /* =========================
+           STANDINGS FILTER - MOBILE
+        ========================= */
+
+        .standings-filter {
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 22px;
+        }
+
+        .standings-filter-select {
+            width: 100%;
+            min-width: 0;
         }
 
         .fire-button {
@@ -1356,6 +1417,33 @@
                 class="standings-content"
                 id="standingsContent"
             >
+
+                <!-- =========================
+                     GROUP FILTER
+                ========================= -->
+
+                <div class="standings-filter">
+
+                    <label
+                        class="standings-filter-label"
+                        for="standingsGroupFilter"
+                    >
+                        View
+                    </label>
+
+                    <select
+                        class="standings-filter-select"
+                        id="standingsGroupFilter"
+                    >
+
+                        <option value="__ALL__">
+                            All Players
+                        </option>
+
+                    </select>
+
+                </div>
+
 
                 <div class="standings-table-wrapper">
 
@@ -1961,6 +2049,330 @@ const EPISODE_SCORES_CSV =
 
 
 /* ========================================
+   STANDINGS DATA
+======================================== */
+
+let standingsPlayers = [];
+let standingsEpisodeScores = [];
+let standingsLatestEpisode = 0;
+
+
+/* ========================================
+   PLAYER GROUP CHECK
+======================================== */
+
+function playerBelongsToGroup(player, selectedGroup) {
+
+    if (selectedGroup === "__ALL__") {
+        return true;
+    }
+
+    return String(player["Group"] || "")
+        .split(",")
+        .map(group => group.trim())
+        .filter(Boolean)
+        .includes(selectedGroup);
+
+}
+
+
+/* ========================================
+   CALCULATE PLAYER STANDINGS
+======================================== */
+
+function calculateStandings(players, episodeScores, throughEpisode) {
+
+    const playerData =
+        players.map(player => {
+
+            const picks = [
+
+                player["1"],
+                player["2"],
+                player["3"],
+                player["4"],
+                player["5"]
+
+            ].filter(Boolean);
+
+
+            const totalPoints =
+                episodeScores
+                    .filter(row =>
+                        row.episode <= throughEpisode &&
+                        picks.includes(row.contestant)
+                    )
+                    .reduce(
+                        (total, row) =>
+                            total +
+                            row.points,
+                        0
+                    );
+
+
+            return {
+
+                name:
+                    player["Name"],
+
+                totalPoints:
+                    totalPoints
+
+            };
+
+        });
+
+
+    playerData.sort((a, b) => {
+
+        if (
+            b.totalPoints !==
+            a.totalPoints
+        ) {
+
+            return (
+                b.totalPoints -
+                a.totalPoints
+            );
+
+        }
+
+
+        return a.name.localeCompare(
+            b.name
+        );
+
+    });
+
+
+    playerData.forEach(
+        (player, index) => {
+
+            if (
+                index > 0 &&
+                player.totalPoints ===
+                playerData[
+                    index - 1
+                ].totalPoints
+            ) {
+
+                player.rank =
+                    playerData[
+                        index - 1
+                    ].rank;
+
+            } else {
+
+                player.rank =
+                    index + 1;
+
+            }
+
+        }
+    );
+
+
+    return playerData;
+
+}
+
+
+/* ========================================
+   RENDER STANDINGS
+======================================== */
+
+function renderStandings(selectedGroup = "__ALL__") {
+
+    const standingsBody =
+        document.getElementById("standingsBody");
+
+
+    const filteredPlayers =
+        standingsPlayers.filter(player =>
+            playerBelongsToGroup(
+                player,
+                selectedGroup
+            )
+        );
+
+
+    const playerData =
+        calculateStandings(
+            filteredPlayers,
+            standingsEpisodeScores,
+            standingsLatestEpisode
+        );
+
+
+    /* ========================================
+       CALCULATE PREVIOUS RANKS
+    ======================================== */
+
+    let previousRankMap = new Map();
+
+
+    if (standingsLatestEpisode > 1) {
+
+        const previousEpisode =
+            standingsLatestEpisode - 1;
+
+
+        const previousPlayerData =
+            calculateStandings(
+                filteredPlayers,
+                standingsEpisodeScores,
+                previousEpisode
+            );
+
+
+        previousPlayerData.forEach(
+            player => {
+
+                previousRankMap.set(
+                    player.name,
+                    player.rank
+                );
+
+            }
+        );
+
+    }
+
+
+    playerData.forEach(player => {
+
+        if (standingsLatestEpisode <= 1) {
+
+            player.rankChange = null;
+
+        } else {
+
+            const previousRank =
+                previousRankMap.get(
+                    player.name
+                );
+
+
+            player.rankChange =
+                previousRank -
+                player.rank;
+
+        }
+
+    });
+
+
+    /* ========================================
+       DISPLAY STANDINGS
+    ======================================== */
+
+    standingsBody.innerHTML = "";
+
+
+    if (!playerData.length) {
+
+        standingsBody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="4"
+                    style="text-align:center;"
+                >
+
+                    No players found in this group.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    playerData.forEach(player => {
+
+        const tr =
+            document.createElement("tr");
+
+
+        let rankChangeHTML = "";
+
+
+        if (
+            player.rankChange === null ||
+            typeof player.rankChange === "undefined"
+        ) {
+
+            rankChangeHTML = `
+                <span class="rank-same">—</span>
+            `;
+
+        } else if (
+            player.rankChange > 0
+        ) {
+
+            rankChangeHTML = `
+                <span class="rank-up">
+                    <i class="fa-solid fa-arrow-up"></i>
+                    ${player.rankChange}
+                </span>
+            `;
+
+        } else if (
+            player.rankChange < 0
+        ) {
+
+            rankChangeHTML = `
+                <span class="rank-down">
+                    <i class="fa-solid fa-arrow-down"></i>
+                    ${Math.abs(player.rankChange)}
+                </span>
+            `;
+
+        } else {
+
+            rankChangeHTML = `
+                <span class="rank-same">—</span>
+            `;
+
+        }
+
+
+        tr.innerHTML = `
+
+            <td class="standings-rank">
+                ${player.rank}
+            </td>
+
+            <td>
+                ${escapeHTML(
+                    player.name
+                )}
+            </td>
+
+            <td class="standings-points">
+                ${player.totalPoints}
+            </td>
+
+            <td class="player-rank-change">
+                ${rankChangeHTML}
+            </td>
+
+        `;
+
+
+        standingsBody.appendChild(tr);
+
+    });
+
+}
+
+
+/* ========================================
    LOAD CURRENT STANDINGS
 ======================================== */
 
@@ -2204,342 +2616,110 @@ async function loadStandings() {
 
 
         /* ========================================
-           CALCULATE PLAYER TOTALS
+           SAVE STANDINGS DATA
         ======================================== */
 
-        const playerData =
-            players.map(player => {
+        standingsPlayers =
+            players;
 
-                const picks = [
+        standingsEpisodeScores =
+            episodeScores;
 
-                    player["1"],
-                    player["2"],
-                    player["3"],
-                    player["4"],
-                    player["5"]
-
-                ].filter(Boolean);
-
-
-                const totalPoints =
-                    episodeScores
-                        .filter(row =>
-                            row.episode <=
-                                latestEpisode &&
-                            picks.includes(
-                                row.contestant
-                            )
-                        )
-                        .reduce(
-                            (total, row) =>
-                                total +
-                                row.points,
-                            0
-                        );
-
-
-                return {
-
-                    name:
-                        player["Name"],
-
-                    totalPoints:
-                        totalPoints
-
-                };
-
-            });
+        standingsLatestEpisode =
+            latestEpisode;
 
 
         /* ========================================
-           SORT CURRENT STANDINGS
+           BUILD GROUP FILTER
         ======================================== */
 
-        playerData.sort((a, b) => {
+        const groupFilter =
+            document.getElementById(
+                "standingsGroupFilter"
+            );
+
+
+        const groups = [
+            ...new Set(
+                players.flatMap(player =>
+                    String(
+                        player["Group"] || ""
+                    )
+                        .split(",")
+                        .map(group =>
+                            group.trim()
+                        )
+                        .filter(Boolean)
+                )
+            )
+        ];
+
+
+        groups.sort((a, b) => {
+
+            const aNum = Number(a);
+            const bNum = Number(b);
+
 
             if (
-                b.totalPoints !==
-                a.totalPoints
+                !Number.isNaN(aNum) &&
+                !Number.isNaN(bNum)
             ) {
 
-                return (
-                    b.totalPoints -
-                    a.totalPoints
-                );
+                return aNum - bNum;
 
             }
 
 
-            return a.name.localeCompare(
-                b.name
-            );
+            return a.localeCompare(b);
 
         });
 
 
-        /* ========================================
-           ASSIGN CURRENT RANKS
-        ======================================== */
+        groupFilter.innerHTML = `
 
-        playerData.forEach(
-            (player, index) => {
+            <option value="__ALL__">
+                All Players
+            </option>
 
-                if (
-                    index > 0 &&
-                    player.totalPoints ===
-                    playerData[
-                        index - 1
-                    ].totalPoints
-                ) {
+        `;
 
-                    player.rank =
-                        playerData[
-                            index - 1
-                        ].rank;
 
-                } else {
+        groups.forEach(group => {
 
-                    player.rank =
-                        index + 1;
+            const option =
+                document.createElement("option");
 
-                }
+            option.value = group;
+            option.textContent = group;
+
+            groupFilter.appendChild(option);
+
+        });
+
+
+        /*
+           Re-render standings whenever
+           the selected group changes.
+        */
+
+        groupFilter.addEventListener(
+            "change",
+            function () {
+
+                renderStandings(
+                    groupFilter.value
+                );
 
             }
         );
 
 
         /* ========================================
-           CALCULATE PREVIOUS RANKS
+           DISPLAY ALL PLAYERS BY DEFAULT
         ======================================== */
 
-        if (latestEpisode > 1) {
-
-            const previousEpisode =
-                latestEpisode - 1;
-
-
-            const previousPlayerData =
-                players.map(player => {
-
-                    const picks = [
-
-                        player["1"],
-                        player["2"],
-                        player["3"],
-                        player["4"],
-                        player["5"]
-
-                    ].filter(Boolean);
-
-
-                    const totalPoints =
-                        episodeScores
-                            .filter(row =>
-                                row.episode <=
-                                    previousEpisode &&
-                                picks.includes(
-                                    row.contestant
-                                )
-                            )
-                            .reduce(
-                                (total, row) =>
-                                    total +
-                                    row.points,
-                                0
-                            );
-
-
-                    return {
-
-                        name:
-                            player["Name"],
-
-                        totalPoints:
-                            totalPoints
-
-                    };
-
-                });
-
-
-            previousPlayerData.sort(
-                (a, b) => {
-
-                    if (
-                        b.totalPoints !==
-                        a.totalPoints
-                    ) {
-
-                        return (
-                            b.totalPoints -
-                            a.totalPoints
-                        );
-
-                    }
-
-
-                    return a.name.localeCompare(
-                        b.name
-                    );
-
-                }
-            );
-
-
-            previousPlayerData.forEach(
-                (player, index) => {
-
-                    if (
-                        index > 0 &&
-                        player.totalPoints ===
-                        previousPlayerData[
-                            index - 1
-                        ].totalPoints
-                    ) {
-
-                        player.rank =
-                            previousPlayerData[
-                                index - 1
-                            ].rank;
-
-                    } else {
-
-                        player.rank =
-                            index + 1;
-
-                    }
-
-                }
-            );
-
-
-            const previousRankMap =
-                new Map();
-
-
-            previousPlayerData.forEach(
-                player => {
-
-                    previousRankMap.set(
-                        player.name,
-                        player.rank
-                    );
-
-                }
-            );
-
-
-            playerData.forEach(player => {
-
-                const previousRank =
-                    previousRankMap.get(
-                        player.name
-                    );
-
-
-                player.rankChange =
-                    previousRank -
-                    player.rank;
-
-            });
-
-        } else {
-
-            /*
-               No previous rank exists
-               after Episode 1.
-            */
-
-            playerData.forEach(player => {
-
-                player.rankChange = null;
-
-            });
-
-        }
-
-
-        /* ========================================
-           DISPLAY STANDINGS
-        ======================================== */
-
-        standingsBody.innerHTML = "";
-
-
-        playerData.forEach(player => {
-
-            const tr =
-                document.createElement("tr");
-
-
-            let rankChangeHTML = "";
-
-
-            if (
-                player.rankChange === null
-            ) {
-
-                rankChangeHTML = `
-                    <span class="rank-same">—</span>
-                `;
-
-            } else if (
-                player.rankChange > 0
-            ) {
-
-                rankChangeHTML = `
-                    <span class="rank-up">
-                        <i class="fa-solid fa-arrow-up"></i>
-                        ${player.rankChange}
-                    </span>
-                `;
-
-            } else if (
-                player.rankChange < 0
-            ) {
-
-                rankChangeHTML = `
-                    <span class="rank-down">
-                        <i class="fa-solid fa-arrow-down"></i>
-                        ${Math.abs(player.rankChange)}
-                    </span>
-                `;
-
-            } else {
-
-                rankChangeHTML = `
-                    <span class="rank-same">—</span>
-                `;
-
-            }
-
-
-            tr.innerHTML = `
-
-                <td class="standings-rank">
-                    ${player.rank}
-                </td>
-
-                <td>
-                    ${escapeHTML(
-                        player.name
-                    )}
-                </td>
-
-                <td class="standings-points">
-                    ${player.totalPoints}
-                </td>
-
-                <td class="player-rank-change">
-                    ${rankChangeHTML}
-                </td>
-
-            `;
-
-
-            standingsBody.appendChild(tr);
-
-        });
+        renderStandings("__ALL__");
 
 
     } catch (error) {
