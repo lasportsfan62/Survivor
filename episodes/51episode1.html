@@ -854,18 +854,18 @@ const SCORE_CATEGORIES = [
     },
 
     {
-    column: "Flip Coin",
-    label: "Flip Coin",
-    icon: "fa-solid fa-coins",
-    multiplier: 1
-},
+        column: "Flip Coin",
+        label: "Flip Coin",
+        icon: "fa-solid fa-coins",
+        multiplier: 1
+    },
 
-{
-    column: "Hit Coin",
-    label: "Hit Coin",
-    icon: "fa-solid fa-bullseye",
-    multiplier: 1
-},
+    {
+        column: "Hit Coin",
+        label: "Hit Coin",
+        icon: "fa-solid fa-bullseye",
+        multiplier: 1
+    },
 
     {
         column: "Fire Making",
@@ -919,15 +919,15 @@ function createBreakdown(score) {
             rawValue * category.multiplier;
 
 
-items.push({
+        items.push({
 
-    label: category.label,
+            label: category.label,
 
-    icon: category.icon,
+            icon: category.icon,
 
-    points: points
+            points: points
 
-});
+        });
 
     });
 
@@ -1024,6 +1024,8 @@ async function loadEpisodeDetails() {
 
 }
 
+
+
 /* =========================================================
    CALCULATE TOP SCORER
 ========================================================= */
@@ -1116,12 +1118,14 @@ function calculateTopScorer(
 }
 
 
+
 /* =========================================================
    LOAD PLAYER SCOREBOARD
 ========================================================= */
 
 async function loadPlayerScoreboard(
     players,
+    contestants,
     episodeScores
 ) {
 
@@ -1129,6 +1133,7 @@ async function loadPlayerScoreboard(
         document.getElementById(
             "playerScoreboard"
         );
+
 
     const filter =
         document.getElementById(
@@ -1197,6 +1202,7 @@ async function loadPlayerScoreboard(
 
             renderPlayerScoreboard(
                 players,
+                contestants,
                 episodeScores,
                 filter.value
             );
@@ -1208,6 +1214,7 @@ async function loadPlayerScoreboard(
 
     renderPlayerScoreboard(
         players,
+        contestants,
         episodeScores,
         filter
             ? filter.value
@@ -1219,11 +1226,57 @@ async function loadPlayerScoreboard(
 
 
 /* =========================================================
+   TRIBE COLORS
+========================================================= */
+
+const tribeColors = {
+
+    "Purple": "#5d179f",
+
+    "Yellow": "#fdf71b",
+
+    "Black": "#464444"
+
+};
+
+
+
+function getTribeColor(
+    contestant,
+    episodeScores
+) {
+
+    const score =
+        episodeScores.find(row =>
+            number(row.Episode) === episodeNumber &&
+            row.Contestant === contestant
+        );
+
+
+    if (!score) {
+        return "";
+    }
+
+
+    const tribe =
+        String(
+            score.Tribe || ""
+        ).trim();
+
+
+    return tribeColors[tribe] || "";
+
+}
+
+
+
+/* =========================================================
    RENDER PLAYER SCOREBOARD
 ========================================================= */
 
 function renderPlayerScoreboard(
     players,
+    contestants,
     episodeScores,
     selectedGroup
 ) {
@@ -1539,13 +1592,39 @@ function renderPlayerScoreboard(
                                     );
 
 
-                            return `
+                            const finalTribeColor =
+                                getTribeColor(
+                                    contestant,
+                                    episodeScores
+                                );
 
-                                <div class="team-contestant">
+
+                            const tribeGradient =
+                                finalTribeColor
+                                    ? finalTribeColor
+                                    : "";
+
+
+                            return `
+                                <div
+                                    class="team-contestant"
+                                    style="${
+                                        tribeGradient
+                                            ? `--tribe-gradient: ${tribeGradient};`
+                                            : ""
+                                    }"
+                                >
 
                                     <span class="team-contestant-name">
 
-                                        <i class="fa-solid fa-user"></i>
+                                        <i
+                                            class="fa-solid fa-user"
+                                            style="${
+                                                tribeGradient
+                                                    ? `background: ${tribeGradient}; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;`
+                                                    : ""
+                                            }"
+                                        ></i>
 
                                         ${escapeHTML(
                                             contestant
@@ -1857,29 +1936,29 @@ async function loadContestantLeaderboard(
                     breakdown.length
                     ? breakdown.map(item => `
 
-    <div class="breakdown-item">
+                        <div class="breakdown-item">
 
-        <span>
+                            <span>
 
-            <i class="${item.icon}"></i>
+                                <i class="${item.icon}"></i>
 
-            ${escapeHTML(item.label)}
+                                ${escapeHTML(item.label)}
 
-        </span>
+                            </span>
 
-        <strong class="${
-            item.points < 0
-            ? "negative"
-            : ""
-        }">
+                            <strong class="${
+                                item.points < 0
+                                ? "negative"
+                                : ""
+                            }">
 
-            ${formatPoints(item.points)}
+                                ${formatPoints(item.points)}
 
-        </strong>
+                            </strong>
 
-    </div>
+                        </div>
 
-`).join("")
+                    `).join("")
                     : `
 
                         <div class="breakdown-empty">
@@ -1891,12 +1970,35 @@ async function loadContestantLeaderboard(
                     `;
 
 
-                return `
+                const tribeColor =
+                    getTribeColor(
+                        contestant.name,
+                        scores
+                    );
 
+
+                const tribeBars =
+                    tribeColor
+                        ? `
+                            <span
+                                class="tribe-color-bar"
+                                style="background: ${tribeColor};"
+                            ></span>
+                        `
+                        : "";
+
+
+                return `
                     <div
                         class="contestant-row"
                         data-contestant-row="${index}"
                     >
+
+                        <div class="tribe-color-bars">
+
+                            ${tribeBars}
+
+                        </div>
 
                         <button
                             class="contestant-main"
@@ -2213,28 +2315,29 @@ async function initializeEpisodePage() {
 
             fetchCSV(DATA_URLS.episodeScores),
 
-    ]);
+        ]);
 
 
         await loadEpisodeDetails();
 
 
-await loadPlayerScoreboard(
-    players,
-    episodeScores
-);
+        await loadPlayerScoreboard(
+            players,
+            contestants,
+            episodeScores
+        );
 
 
-calculateTopScorer(
-    players,
-    episodeScores
-);
+        calculateTopScorer(
+            players,
+            episodeScores
+        );
 
 
-await loadContestantLeaderboard(
-    contestants,
-    episodeScores
-);
+        await loadContestantLeaderboard(
+            contestants,
+            episodeScores
+        );
 
 
         await setupNavigation(
