@@ -759,39 +759,24 @@ main {
 
 
 .player-main {
-
     width: 100%;
-
     min-height: 64px;
-
-    padding:
-        12px 18px;
-
+    padding: 12px 18px 12px 52px;
     display: grid;
-
     grid-template-columns:
         42px
-        minmax(130px, 1fr)
-        100px
-        100px
-        95px
+        minmax(150px, 1fr)
+        130px
+        130px
         24px;
-
     align-items: center;
-
     gap: 12px;
-
     background: transparent;
-
     color: var(--text);
-
     text-align: left;
-
     cursor: pointer;
-
-    transition:
-        background .2s ease;
-
+    transition: background .2s ease;
+    position: relative;
 }
 
 
@@ -854,23 +839,10 @@ main {
 
 
 .player-rank-change {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 4px;
-
+    position: absolute;
+    right: 54px;
+    width: 40px;
     text-align: center;
-
-    font-size: 12px;
-
-    font-weight: 700;
-
-    white-space: nowrap;
-
 }
 
 
@@ -896,14 +868,8 @@ main {
 
 
 .expand-icon {
-
-    color: var(--muted);
-
-    text-align: center;
-
-    transition:
-        transform .25s ease;
-
+    grid-column: 5;
+    justify-self: end;
 }
 
 
@@ -1018,13 +984,13 @@ main {
 
 
 .team-contestant-name i {
-
     flex: 0 0 auto;
-
     color: var(--fire);
-
     font-size: 10px;
-
+    background: var(--tribe-gradient, none);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 
@@ -1060,54 +1026,48 @@ main {
 ========================================================= */
 
 .contestant-row {
-
-    border-bottom:
-        1px solid
-        var(--border);
-
+    position: relative;
+    border-bottom: 1px solid var(--border);
 }
 
+.tribe-color-bars {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+    width: 32px;
+}
+
+.tribe-color-bar {
+    width: 8px;
+    flex: 0 0 8px;
+}
 
 .contestant-row:last-child {
-
     border-bottom: 0;
-
 }
 
-
 .contestant-main {
-
     width: 100%;
-
     min-height: 58px;
-
-    padding:
-        10px 18px;
-
+    padding: 10px 18px 10px 52px;
     display: grid;
-
     grid-template-columns:
         42px
         minmax(150px, 1fr)
         130px
         130px
         24px;
-
     align-items: center;
-
     gap: 12px;
-
     background: transparent;
-
     color: var(--text);
-
     text-align: left;
-
     cursor: pointer;
-
-    transition:
-        background .2s ease;
-
+    transition: background .2s ease;
 }
 
 
@@ -1189,8 +1149,7 @@ main {
 
 .contestant-detail-inner {
 
-    padding:
-        15px 18px 20px;
+    padding: 16px 16px 16px 52px;
 
 }
 
@@ -1716,23 +1675,16 @@ footer {
 
     /* PLAYER SCOREBOARD */
 
-    .player-main {
-
-        grid-template-columns:
-            30px
-            minmax(100px, 1fr)
-            65px
-            65px
-            22px;
-
-        gap: 7px;
-
-        padding:
-            10px 12px;
-
-    }
-
-
+.player-main {
+    grid-template-columns:
+        30px
+        minmax(100px, 1fr)
+        62px
+        62px
+        22px;
+    gap: 7px;
+    padding: 10px 12px 10px 52px;
+}
 
     .player-episode-points,
     .player-total-points {
@@ -1771,21 +1723,16 @@ footer {
 
     /* CONTESTANT BOARD */
 
-    .contestant-main {
-
-        grid-template-columns:
-            30px
-            minmax(100px, 1fr)
-            62px
-            62px
-            22px;
-
-        gap: 7px;
-
-        padding:
-            10px 12px;
-
-    }
+.contestant-main {
+    grid-template-columns:
+        30px
+        minmax(100px, 1fr)
+        62px
+        62px
+        22px;
+    gap: 7px;
+    padding: 10px 12px 10px 52px;
+}
 
 
     .contestant-name {
@@ -1803,12 +1750,12 @@ footer {
     }
 
 
-    .contestant-detail-inner {
+.contestant-detail-inner {
 
-        padding:
-            13px 12px 17px;
+    padding:
+        13px 12px 17px 52px;
 
-    }
+}
 
 
     .breakdown-list {
