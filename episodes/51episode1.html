@@ -3,18 +3,7 @@
 
 <head>
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GMV207HGCB"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-GMV207HGCB');
-    </script>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
 
 <meta
     name="viewport"
@@ -245,11 +234,58 @@
 
             </div>
 
+        
+                        <div class="scoreboard">
 
-            <div
-                class="scoreboard"
-                id="playerScoreboard"
-            >
+                <div class="scoreboard-header">
+
+                    <div class="scoreboard-header-title">
+
+                        <span class="scoreboard-header-kicker">
+                            PLAYER RANKINGS
+                        </span>
+
+                    </div>
+
+
+                    <div class="scoreboard-filter">
+
+                        <label
+                            class="scoreboard-filter-label"
+                            for="playerGroupFilter"
+                        >
+                            VIEW
+                        </label>
+
+                        <select
+                            id="playerGroupFilter"
+                            class="scoreboard-filter-select"
+                        >
+                            <option value="__ALL__">
+                                All Players
+                            </option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="playerScoreboard"
+                >
+
+                    <div class="loading">
+
+                        <i class="fa-solid fa-circle-notch fa-spin"></i>
+
+                        <span>Loading player standings...</span>
+
+                    </div>
+
+                </div>
+
+            </div>
 
                 <div class="loading">
 
@@ -1104,6 +1140,145 @@ async function loadPlayerScoreboard(
             "playerScoreboard"
         );
 
+    const filter =
+        document.getElementById(
+            "playerGroupFilter"
+        );
+
+
+    /*
+       Discover all groups from the Players sheet.
+       Multiple groups can be separated by commas.
+    */
+
+    const groups = [
+        ...new Set(
+            players.flatMap(player =>
+                String(player["Group"] || "")
+                    .split(",")
+                    .map(group => group.trim())
+                    .filter(Boolean)
+            )
+        )
+    ];
+
+
+    groups.sort((a, b) => {
+
+        const aNum = Number(a);
+        const bNum = Number(b);
+
+        if (
+            !Number.isNaN(aNum) &&
+            !Number.isNaN(bNum)
+        ) {
+            return aNum - bNum;
+        }
+
+        return a.localeCompare(b);
+
+    });
+
+
+    /*
+       Populate the dropdown.
+    */
+
+    if (filter) {
+
+        filter.innerHTML = `
+
+            <option value="__ALL__">
+                All Players
+            </option>
+
+            ${groups.map(group => `
+
+                <option value="${escapeHTML(group)}">
+                    Group ${escapeHTML(group)}
+                </option>
+
+            `).join("")}
+
+        `;
+
+
+        filter.onchange = () => {
+
+            renderPlayerScoreboard(
+                players,
+                episodeScores,
+                filter.value
+            );
+
+        };
+
+    }
+
+
+    renderPlayerScoreboard(
+        players,
+        episodeScores,
+        filter
+            ? filter.value
+            : "__ALL__"
+    );
+
+}
+
+
+
+/* =========================================================
+   RENDER PLAYER SCOREBOARD
+========================================================= */
+
+function renderPlayerScoreboard(
+    players,
+    episodeScores,
+    selectedGroup
+) {
+
+    const board =
+        document.getElementById(
+            "playerScoreboard"
+        );
+
+
+    /*
+       Filter players by Group.
+       "All Players" includes everyone, including
+       players with a blank Group cell.
+    */
+
+    const filteredPlayers =
+        players.filter(player => {
+
+            if (
+                !player.Name
+            ) {
+                return false;
+            }
+
+
+            if (
+                selectedGroup === "__ALL__"
+            ) {
+                return true;
+            }
+
+
+            return String(
+                player["Group"] || ""
+            )
+                .split(",")
+                .map(group =>
+                    group.trim()
+                )
+                .filter(Boolean)
+                .includes(selectedGroup);
+
+        });
+
 
     /*
        Calculate each Player's points from
@@ -1111,64 +1286,62 @@ async function loadPlayerScoreboard(
     */
 
     const playerData =
-        players
-            .filter(player => player.Name)
-            .map(player => {
+        filteredPlayers.map(player => {
 
-                const picks = [
-                    player["1"],
-                    player["2"],
-                    player["3"],
-                    player["4"],
-                    player["5"]
-                ].filter(Boolean);
+            const picks = [
+                player["1"],
+                player["2"],
+                player["3"],
+                player["4"],
+                player["5"]
+            ].filter(Boolean);
 
 
-                const episodePoints =
-                    episodeScores
-                        .filter(row =>
-                            number(row.Episode) === episodeNumber &&
-                            picks.includes(row.Contestant)
-                        )
-                        .reduce(
-                            (total, row) =>
-                                total +
-                                number(row["Total Points"]),
-                            0
-                        );
+            const episodePoints =
+                episodeScores
+                    .filter(row =>
+                        number(row.Episode) === episodeNumber &&
+                        picks.includes(row.Contestant)
+                    )
+                    .reduce(
+                        (total, row) =>
+                            total +
+                            number(row["Total Points"]),
+                        0
+                    );
 
 
-                const totalPoints =
-                    episodeScores
-                        .filter(row =>
-                            number(row.Episode) <= episodeNumber &&
-                            picks.includes(row.Contestant)
-                        )
-                        .reduce(
-                            (total, row) =>
-                                total +
-                                number(row["Total Points"]),
-                            0
-                        );
+            const totalPoints =
+                episodeScores
+                    .filter(row =>
+                        number(row.Episode) <= episodeNumber &&
+                        picks.includes(row.Contestant)
+                    )
+                    .reduce(
+                        (total, row) =>
+                            total +
+                            number(row["Total Points"]),
+                        0
+                    );
 
 
-                return {
+            return {
 
-                    name:
-                        player.Name,
+                name:
+                    player.Name,
 
-                    picks:
-                        picks,
+                picks:
+                    picks,
 
-                    episodePoints:
-                        episodePoints,
+                episodePoints:
+                    episodePoints,
 
-                    totalPoints:
-                        totalPoints
+                totalPoints:
+                    totalPoints
 
-                };
+            };
 
-            });
+        });
 
 
     /*
@@ -1178,7 +1351,10 @@ async function loadPlayerScoreboard(
 
     playerData.sort((a, b) => {
 
-        if (b.totalPoints !== a.totalPoints) {
+        if (
+            b.totalPoints !==
+            a.totalPoints
+        ) {
 
             return b.totalPoints -
                 a.totalPoints;
@@ -1214,8 +1390,8 @@ async function loadPlayerScoreboard(
 
 
     /*
-       Calculate previous rankings for Episode 2+.
-       Episode 1 has no previous rank.
+       Calculate previous rankings using the
+       SAME selected group.
     */
 
     let previousRankings = {};
@@ -1224,45 +1400,43 @@ async function loadPlayerScoreboard(
     if (episodeNumber > 1) {
 
         const previousPlayerData =
-            players
-                .filter(player => player.Name)
-                .map(player => {
+            filteredPlayers.map(player => {
 
-                    const picks = [
-                        player["1"],
-                        player["2"],
-                        player["3"],
-                        player["4"],
-                        player["5"]
-                    ].filter(Boolean);
+                const picks = [
+                    player["1"],
+                    player["2"],
+                    player["3"],
+                    player["4"],
+                    player["5"]
+                ].filter(Boolean);
 
 
-                    const totalPoints =
-                        episodeScores
-                            .filter(row =>
-                                number(row.Episode) <
-                                episodeNumber &&
-                                picks.includes(row.Contestant)
-                            )
-                            .reduce(
-                                (total, row) =>
-                                    total +
-                                    number(row["Total Points"]),
-                                0
-                            );
+                const totalPoints =
+                    episodeScores
+                        .filter(row =>
+                            number(row.Episode) <
+                            episodeNumber &&
+                            picks.includes(row.Contestant)
+                        )
+                        .reduce(
+                            (total, row) =>
+                                total +
+                                number(row["Total Points"]),
+                            0
+                        );
 
 
-                    return {
+                return {
 
-                        name:
-                            player.Name,
+                    name:
+                        player.Name,
 
-                        totalPoints:
-                            totalPoints
+                    totalPoints:
+                        totalPoints
 
-                    };
+                };
 
-                });
+            });
 
 
         previousPlayerData.sort((a, b) => {
@@ -1327,7 +1501,7 @@ async function loadPlayerScoreboard(
                 <i class="fa-solid fa-users"></i>
 
                 <span>
-                    Player standings will appear after the draft.
+                    No players are in this group.
                 </span>
 
             </div>
@@ -1357,50 +1531,50 @@ async function loadPlayerScoreboard(
 
 
                 const teamHTML =
-    player.picks.length
-    ? player.picks.map(
-        contestant => {
+                    player.picks.length
+                    ? player.picks.map(
+                        contestant => {
 
-            const contestantTotalPoints =
-                episodeScores
-                    .filter(row =>
-                        number(row.Episode) <= episodeNumber &&
-                        row.Contestant === contestant
-                    )
-                    .reduce(
-                        (total, row) =>
-                            total +
-                            number(row["Total Points"]),
-                        0
-                    );
+                            const contestantTotalPoints =
+                                episodeScores
+                                    .filter(row =>
+                                        number(row.Episode) <= episodeNumber &&
+                                        row.Contestant === contestant
+                                    )
+                                    .reduce(
+                                        (total, row) =>
+                                            total +
+                                            number(row["Total Points"]),
+                                        0
+                                    );
 
 
-            return `
+                            return `
 
-                <div class="team-contestant">
+                                <div class="team-contestant">
 
-                    <span class="team-contestant-name">
+                                    <span class="team-contestant-name">
 
-                        <i class="fa-solid fa-user"></i>
+                                        <i class="fa-solid fa-user"></i>
 
-                        ${escapeHTML(
-                            contestant
-                        )}
+                                        ${escapeHTML(
+                                            contestant
+                                        )}
 
-                    </span>
+                                    </span>
 
-                    <strong class="team-contestant-points">
+                                    <strong class="team-contestant-points">
 
-                        ${contestantTotalPoints}
+                                        ${contestantTotalPoints}
 
-                    </strong>
+                                    </strong>
 
-                </div>
+                                </div>
 
-            `;
+                            `;
 
-        }
-    ).join("")
+                        }
+                    ).join("")
                     : `
 
                         <div class="team-empty">
