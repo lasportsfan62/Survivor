@@ -570,6 +570,145 @@ main {
 
 }
 
+/* =========================================================
+   PLAYER SCOREBOARD HEADER
+========================================================= */
+
+.scoreboard-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding:
+        16px 18px;
+
+    background:
+        var(--card-light);
+
+    border-bottom:
+        1px solid
+        var(--border);
+
+}
+
+
+.scoreboard-header-title {
+
+    display: flex;
+
+    align-items: center;
+
+}
+
+
+.scoreboard-header-kicker {
+
+    color:
+        var(--muted);
+
+    font-size:
+        .68rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        .14em;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.scoreboard-filter {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+}
+
+
+.scoreboard-filter-label {
+
+    color:
+        var(--muted);
+
+    font-size:
+        .68rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        .12em;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.scoreboard-filter-select {
+
+    min-width:
+        155px;
+
+    height:
+        36px;
+
+    padding:
+        0 32px 0 12px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        8px;
+
+    background:
+        #111;
+
+    color:
+        var(--text);
+
+    font:
+        inherit;
+
+    font-size:
+        .75rem;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    outline:
+        none;
+
+}
+
+
+.scoreboard-filter-select:focus {
+
+    border-color:
+        var(--fire);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(255,106,0,.12);
+
+}
 
 
 /* =========================================================
@@ -1540,6 +1679,40 @@ footer {
 
     }
 
+    /* PLAYER SCOREBOARD HEADER */
+
+    .scoreboard-header {
+
+        align-items: stretch;
+
+        flex-direction: column;
+
+        gap: 12px;
+
+        padding:
+            14px 15px;
+
+    }
+
+
+    .scoreboard-filter {
+
+        align-items: stretch;
+
+        flex-direction: column;
+
+        gap: 6px;
+
+    }
+
+
+    .scoreboard-filter-select {
+
+        width: 100%;
+
+        min-width: 0;
+
+    }
 
     /* PLAYER SCOREBOARD */
 
