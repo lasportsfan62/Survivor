@@ -181,6 +181,29 @@
 
                 </div>
 
+                <!-- LOST A SURVIVOR -->
+
+<div class="highlight-card lost-survivor">
+
+    <div class="highlight-icon">
+
+        <i class="fa-solid fa-user-minus"></i>
+
+    </div>
+
+    <div class="highlight-label">
+        LOST A SURVIVOR
+    </div>
+
+    <div
+        class="highlight-value"
+        id="lostASurvivor"
+    >
+        —
+    </div>
+
+</div>
+
 
 
                 <!-- TEAM ELIMINATED -->
@@ -1011,16 +1034,20 @@ async function loadEpisodeDetails() {
         `;
 
 
-    document.getElementById("votedOut").textContent =
-        detail["Voted Out"] || "—";
+document.getElementById("votedOut").textContent =
+    detail["Voted Out"] || "—";
 
 
-    document.getElementById("topScorer").textContent =
-        "—";
+document.getElementById("topScorer").textContent =
+    "—";
 
 
-    document.getElementById("teamEliminated").textContent =
-        detail["Team Eliminated"] || "—";
+document.getElementById("lostASurvivor").textContent =
+    detail["Lost a Survivor"] || "—";
+
+
+document.getElementById("teamEliminated").textContent =
+    detail["Team Eliminated"] || "—";
 
 }
 
@@ -1087,37 +1114,33 @@ function calculateTopScorer(
     }
 
 
-    playerData.sort((a, b) =>
-        b.episodePoints -
-        a.episodePoints
-    );
+    const topScore = Math.max(
+    ...playerData.map(player => player.episodePoints)
+);
 
 
-    const topScorer =
-        playerData[0];
-
-
-    if (!topScorer || topScorer.episodePoints === 0) {
-
-        document.getElementById(
-            "topScorer"
-        ).textContent = "—";
-
-        return;
-
-    }
-
+if (topScore === 0) {
 
     document.getElementById(
         "topScorer"
-    ).textContent =
-        `${topScorer.name} ${formatPoints(
-            topScorer.episodePoints
-        )}`;
+    ).textContent = "—";
 
+    return;
 }
 
+const topScorers = playerData.filter(
+    player => player.episodePoints === topScore
+);
 
+
+document.getElementById(
+    "topScorer"
+).textContent =
+    `${topScorers.map(player => player.name).join(", ")} ${formatPoints(
+        topScore
+    )}`;
+
+}
 
 /* =========================================================
    LOAD PLAYER SCOREBOARD
@@ -1931,6 +1954,27 @@ async function loadContestantLeaderboard(
                         contestant.score
                     );
 
+const inTheBag = String(contestant.score["In the Bag"] || "").trim();
+
+const inTheBagHTML = inTheBag
+    ? `
+        <div class="detail-heading">
+            <span>
+                <i class="fa-solid fa-sack-dollar"></i>
+                IN THE BAG
+            </span>
+        </div>
+
+        <div class="breakdown-list">
+            <div class="breakdown-item">
+                <span>
+                    <i class="fa-solid fa-gift"></i>
+                    ${escapeHTML(inTheBag).replace(/\r?\n/g, "<br>")}
+                </span>
+            </div>
+        </div>
+    `
+    : "";
 
                 const breakdownHTML =
                     breakdown.length
@@ -2042,29 +2086,21 @@ async function loadContestantLeaderboard(
                         </button>
 
 
-                        <div
-                            class="contestant-details"
-                            id="contestant-details-${index}"
-                        >
+<div class="contestant-details" id="contestant-details-${index}">
+    <div class="contestant-detail-inner">
 
-                            <div class="contestant-detail-inner">
+        ${inTheBagHTML}
 
+        <div class="detail-heading" style="margin-top: 4px;">
+            <span>
+                <i class="fa-solid fa-chart-column"></i>
+                EPISODE ${episodeNumber} BREAKDOWN
+            </span>
+        </div>
 
-                                <div class="detail-heading">
-
-                                    <span>
-                                        <i class="fa-solid fa-chart-column"></i>
-                                        EPISODE ${episodeNumber} BREAKDOWN
-                                    </span>
-
-                                </div>
-
-
-                                <div class="breakdown-list">
-
-                                    ${breakdownHTML}
-
-                                </div>
+        <div class="breakdown-list">
+            ${breakdownHTML}
+        </div>
 
 
                                 <div class="detail-total">
