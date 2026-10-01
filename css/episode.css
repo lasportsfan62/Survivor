@@ -427,7 +427,7 @@ main {
     display: grid;
 
     grid-template-columns:
-        repeat(3, 1fr);
+        repeat(2, 1fr);
 
     gap: 14px;
 
@@ -492,6 +492,10 @@ main {
     background:
         var(--fire);
 
+}
+
+.highlight-card.lost-survivor::after {
+    background: #8f0000;
 }
 
 
