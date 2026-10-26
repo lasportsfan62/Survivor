@@ -80,7 +80,7 @@
             </span>
 
             <h1 id="episodeTitle">
-                EPISODE 1
+                EPISODE 4
             </h1>
 
         </div>
@@ -181,6 +181,29 @@
 
                 </div>
 
+                <!-- LOST A SURVIVOR -->
+
+<div class="highlight-card lost-survivor">
+
+    <div class="highlight-icon">
+
+        <i class="fa-solid fa-user-minus"></i>
+
+    </div>
+
+    <div class="highlight-label">
+        LOST A SURVIVOR
+    </div>
+
+    <div
+        class="highlight-value"
+        id="lostASurvivor"
+    >
+        —
+    </div>
+
+</div>
+
 
 
                 <!-- TEAM ELIMINATED -->
@@ -234,17 +257,54 @@
 
             </div>
 
+        
+                        <div class="scoreboard">
 
-            <div
-                class="scoreboard"
-                id="playerScoreboard"
-            >
+                <div class="scoreboard-header">
 
-                <div class="loading">
+                    <div class="scoreboard-header-title">
 
-                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+                        <span class="scoreboard-header-kicker">
+                            PLAYER RANKINGS
+                        </span>
 
-                    <span>Loading player standings...</span>
+                    </div>
+
+
+                    <div class="scoreboard-filter">
+
+                        <label
+                            class="scoreboard-filter-label"
+                            for="playerGroupFilter"
+                        >
+                            VIEW
+                        </label>
+
+                        <select
+                            id="playerGroupFilter"
+                            class="scoreboard-filter-select"
+                        >
+                            <option value="__ALL__">
+                                All Players
+                            </option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="playerScoreboard"
+                >
+
+                    <div class="loading">
+
+                        <i class="fa-solid fa-circle-notch fa-spin"></i>
+
+                        <span>Loading player standings...</span>
+
+                    </div>
 
                 </div>
 
@@ -817,18 +877,18 @@ const SCORE_CATEGORIES = [
     },
 
     {
-    column: "Flip Coin",
-    label: "Flip Coin",
-    icon: "fa-solid fa-coins",
-    multiplier: 1
-},
+        column: "Flip Coin",
+        label: "Flip Coin",
+        icon: "fa-solid fa-coins",
+        multiplier: 1
+    },
 
-{
-    column: "Hit Coin",
-    label: "Hit Coin",
-    icon: "fa-solid fa-bullseye",
-    multiplier: 1
-},
+    {
+        column: "Hit Coin",
+        label: "Hit Coin",
+        icon: "fa-solid fa-bullseye",
+        multiplier: 1
+    },
 
     {
         column: "Fire Making",
@@ -882,15 +942,15 @@ function createBreakdown(score) {
             rawValue * category.multiplier;
 
 
-items.push({
+        items.push({
 
-    label: category.label,
+            label: category.label,
 
-    icon: category.icon,
+            icon: category.icon,
 
-    points: points
+            points: points
 
-});
+        });
 
     });
 
@@ -974,18 +1034,24 @@ async function loadEpisodeDetails() {
         `;
 
 
-    document.getElementById("votedOut").textContent =
-        detail["Voted Out"] || "—";
+document.getElementById("votedOut").textContent =
+    detail["Voted Out"] || "—";
 
 
-    document.getElementById("topScorer").textContent =
-        "—";
+document.getElementById("topScorer").textContent =
+    "—";
 
 
-    document.getElementById("teamEliminated").textContent =
-        detail["Team Eliminated"] || "—";
+document.getElementById("lostASurvivor").textContent =
+    detail["Lost a Survivor"] || "—";
+
+
+document.getElementById("teamEliminated").textContent =
+    detail["Team Eliminated"] || "—";
 
 }
+
+
 
 /* =========================================================
    CALCULATE TOP SCORER
@@ -1048,36 +1114,33 @@ function calculateTopScorer(
     }
 
 
-    playerData.sort((a, b) =>
-        b.episodePoints -
-        a.episodePoints
-    );
+    const topScore = Math.max(
+    ...playerData.map(player => player.episodePoints)
+);
 
 
-    const topScorer =
-        playerData[0];
-
-
-    if (!topScorer || topScorer.episodePoints === 0) {
-
-        document.getElementById(
-            "topScorer"
-        ).textContent = "—";
-
-        return;
-
-    }
-
+if (topScore === 0) {
 
     document.getElementById(
         "topScorer"
-    ).textContent =
-        `${topScorer.name} ${formatPoints(
-            topScorer.episodePoints
-        )}`;
+    ).textContent = "—";
 
+    return;
 }
 
+const topScorers = playerData.filter(
+    player => player.episodePoints === topScore
+);
+
+
+document.getElementById(
+    "topScorer"
+).textContent =
+    `${topScorers.map(player => player.name).join(", ")} ${formatPoints(
+        topScore
+    )}`;
+
+}
 
 /* =========================================================
    LOAD PLAYER SCOREBOARD
@@ -1085,6 +1148,7 @@ function calculateTopScorer(
 
 async function loadPlayerScoreboard(
     players,
+    contestants,
     episodeScores
 ) {
 
@@ -1094,70 +1158,257 @@ async function loadPlayerScoreboard(
         );
 
 
+    const filter =
+        document.getElementById(
+            "playerGroupFilter"
+        );
+
+
+    /*
+       Discover all groups from the Players sheet.
+       Multiple groups can be separated by commas.
+    */
+
+    const groups = [
+        ...new Set(
+            players.flatMap(player =>
+                String(player["Group"] || "")
+                    .split(",")
+                    .map(group => group.trim())
+                    .filter(Boolean)
+            )
+        )
+    ];
+
+
+    groups.sort((a, b) => {
+
+        const aNum = Number(a);
+        const bNum = Number(b);
+
+        if (
+            !Number.isNaN(aNum) &&
+            !Number.isNaN(bNum)
+        ) {
+            return aNum - bNum;
+        }
+
+        return a.localeCompare(b);
+
+    });
+
+
+    /*
+       Populate the dropdown.
+    */
+
+    if (filter) {
+
+        filter.innerHTML = `
+
+            <option value="__ALL__">
+                All Players
+            </option>
+
+            ${groups.map(group => `
+
+                <option value="${escapeHTML(group)}">
+                    Group ${escapeHTML(group)}
+                </option>
+
+            `).join("")}
+
+        `;
+
+
+        filter.onchange = () => {
+
+            renderPlayerScoreboard(
+                players,
+                contestants,
+                episodeScores,
+                filter.value
+            );
+
+        };
+
+    }
+
+
+    renderPlayerScoreboard(
+        players,
+        contestants,
+        episodeScores,
+        filter
+            ? filter.value
+            : "__ALL__"
+    );
+
+}
+
+
+
+/* =========================================================
+   TRIBE COLORS
+========================================================= */
+
+const tribeColors = {
+
+    "Purple": "#5d179f",
+
+    "Yellow": "#fdf71b",
+
+    "Black": "#464444",
+
+    "Pink": "#f12650"
+};
+
+
+
+function getTribeColor(
+    contestant,
+    episodeScores
+) {
+
+    const score =
+        episodeScores.find(row =>
+            number(row.Episode) === episodeNumber &&
+            row.Contestant === contestant
+        );
+
+
+    if (!score) {
+        return "";
+    }
+
+
+    const tribe =
+        String(
+            score.Tribe || ""
+        ).trim();
+
+
+    return tribeColors[tribe] || "";
+
+}
+
+
+
+/* =========================================================
+   RENDER PLAYER SCOREBOARD
+========================================================= */
+
+function renderPlayerScoreboard(
+    players,
+    contestants,
+    episodeScores,
+    selectedGroup
+) {
+
+    const board =
+        document.getElementById(
+            "playerScoreboard"
+        );
+
+
+    /*
+       Filter players by Group.
+       "All Players" includes everyone, including
+       players with a blank Group cell.
+    */
+
+    const filteredPlayers =
+        players.filter(player => {
+
+            if (
+                !player.Name
+            ) {
+                return false;
+            }
+
+
+            if (
+                selectedGroup === "__ALL__"
+            ) {
+                return true;
+            }
+
+
+            return String(
+                player["Group"] || ""
+            )
+                .split(",")
+                .map(group =>
+                    group.trim()
+                )
+                .filter(Boolean)
+                .includes(selectedGroup);
+
+        });
+
+
     /*
        Calculate each Player's points from
        the five Contestants they drafted.
     */
 
     const playerData =
-        players
-            .filter(player => player.Name)
-            .map(player => {
+        filteredPlayers.map(player => {
 
-                const picks = [
-                    player["1"],
-                    player["2"],
-                    player["3"],
-                    player["4"],
-                    player["5"]
-                ].filter(Boolean);
+            const picks = [
+                player["1"],
+                player["2"],
+                player["3"],
+                player["4"],
+                player["5"]
+            ].filter(Boolean);
 
 
-                const episodePoints =
-                    episodeScores
-                        .filter(row =>
-                            number(row.Episode) === episodeNumber &&
-                            picks.includes(row.Contestant)
-                        )
-                        .reduce(
-                            (total, row) =>
-                                total +
-                                number(row["Total Points"]),
-                            0
-                        );
+            const episodePoints =
+                episodeScores
+                    .filter(row =>
+                        number(row.Episode) === episodeNumber &&
+                        picks.includes(row.Contestant)
+                    )
+                    .reduce(
+                        (total, row) =>
+                            total +
+                            number(row["Total Points"]),
+                        0
+                    );
 
 
-                const totalPoints =
-                    episodeScores
-                        .filter(row =>
-                            number(row.Episode) <= episodeNumber &&
-                            picks.includes(row.Contestant)
-                        )
-                        .reduce(
-                            (total, row) =>
-                                total +
-                                number(row["Total Points"]),
-                            0
-                        );
+            const totalPoints =
+                episodeScores
+                    .filter(row =>
+                        number(row.Episode) <= episodeNumber &&
+                        picks.includes(row.Contestant)
+                    )
+                    .reduce(
+                        (total, row) =>
+                            total +
+                            number(row["Total Points"]),
+                        0
+                    );
 
 
-                return {
+            return {
 
-                    name:
-                        player.Name,
+                name:
+                    player.Name,
 
-                    picks:
-                        picks,
+                picks:
+                    picks,
 
-                    episodePoints:
-                        episodePoints,
+                episodePoints:
+                    episodePoints,
 
-                    totalPoints:
-                        totalPoints
+                totalPoints:
+                    totalPoints
 
-                };
+            };
 
-            });
+        });
 
 
     /*
@@ -1167,7 +1418,10 @@ async function loadPlayerScoreboard(
 
     playerData.sort((a, b) => {
 
-        if (b.totalPoints !== a.totalPoints) {
+        if (
+            b.totalPoints !==
+            a.totalPoints
+        ) {
 
             return b.totalPoints -
                 a.totalPoints;
@@ -1203,8 +1457,8 @@ async function loadPlayerScoreboard(
 
 
     /*
-       Calculate previous rankings for Episode 2+.
-       Episode 1 has no previous rank.
+       Calculate previous rankings using the
+       SAME selected group.
     */
 
     let previousRankings = {};
@@ -1213,45 +1467,43 @@ async function loadPlayerScoreboard(
     if (episodeNumber > 1) {
 
         const previousPlayerData =
-            players
-                .filter(player => player.Name)
-                .map(player => {
+            filteredPlayers.map(player => {
 
-                    const picks = [
-                        player["1"],
-                        player["2"],
-                        player["3"],
-                        player["4"],
-                        player["5"]
-                    ].filter(Boolean);
+                const picks = [
+                    player["1"],
+                    player["2"],
+                    player["3"],
+                    player["4"],
+                    player["5"]
+                ].filter(Boolean);
 
 
-                    const totalPoints =
-                        episodeScores
-                            .filter(row =>
-                                number(row.Episode) <
-                                episodeNumber &&
-                                picks.includes(row.Contestant)
-                            )
-                            .reduce(
-                                (total, row) =>
-                                    total +
-                                    number(row["Total Points"]),
-                                0
-                            );
+                const totalPoints =
+                    episodeScores
+                        .filter(row =>
+                            number(row.Episode) <
+                            episodeNumber &&
+                            picks.includes(row.Contestant)
+                        )
+                        .reduce(
+                            (total, row) =>
+                                total +
+                                number(row["Total Points"]),
+                            0
+                        );
 
 
-                    return {
+                return {
 
-                        name:
-                            player.Name,
+                    name:
+                        player.Name,
 
-                        totalPoints:
-                            totalPoints
+                    totalPoints:
+                        totalPoints
 
-                    };
+                };
 
-                });
+            });
 
 
         previousPlayerData.sort((a, b) => {
@@ -1316,7 +1568,7 @@ async function loadPlayerScoreboard(
                 <i class="fa-solid fa-users"></i>
 
                 <span>
-                    Player standings will appear after the draft.
+                    No players are in this group.
                 </span>
 
             </div>
@@ -1346,50 +1598,76 @@ async function loadPlayerScoreboard(
 
 
                 const teamHTML =
-    player.picks.length
-    ? player.picks.map(
-        contestant => {
+                    player.picks.length
+                    ? player.picks.map(
+                        contestant => {
 
-            const contestantTotalPoints =
-                episodeScores
-                    .filter(row =>
-                        number(row.Episode) <= episodeNumber &&
-                        row.Contestant === contestant
-                    )
-                    .reduce(
-                        (total, row) =>
-                            total +
-                            number(row["Total Points"]),
-                        0
-                    );
+                            const contestantTotalPoints =
+                                episodeScores
+                                    .filter(row =>
+                                        number(row.Episode) <= episodeNumber &&
+                                        row.Contestant === contestant
+                                    )
+                                    .reduce(
+                                        (total, row) =>
+                                            total +
+                                            number(row["Total Points"]),
+                                        0
+                                    );
 
 
-            return `
+                            const finalTribeColor =
+                                getTribeColor(
+                                    contestant,
+                                    episodeScores
+                                );
 
-                <div class="team-contestant">
 
-                    <span class="team-contestant-name">
+                            const tribeGradient =
+                                finalTribeColor
+                                    ? finalTribeColor
+                                    : "";
 
-                        <i class="fa-solid fa-user"></i>
 
-                        ${escapeHTML(
-                            contestant
-                        )}
+                            return `
+                                <div
+                                    class="team-contestant"
+                                    style="${
+                                        tribeGradient
+                                            ? `--tribe-gradient: ${tribeGradient};`
+                                            : ""
+                                    }"
+                                >
 
-                    </span>
+                                    <span class="team-contestant-name">
 
-                    <strong class="team-contestant-points">
+                                        <i
+                                            class="fa-solid fa-user"
+                                            style="${
+                                                tribeGradient
+                                                    ? `background: ${tribeGradient}; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;`
+                                                    : ""
+                                            }"
+                                        ></i>
 
-                        ${contestantTotalPoints}
+                                        ${escapeHTML(
+                                            contestant
+                                        )}
 
-                    </strong>
+                                    </span>
 
-                </div>
+                                    <strong class="team-contestant-points">
 
-            `;
+                                        ${contestantTotalPoints}
 
-        }
-    ).join("")
+                                    </strong>
+
+                                </div>
+
+                            `;
+
+                        }
+                    ).join("")
                     : `
 
                         <div class="team-empty">
@@ -1677,34 +1955,55 @@ async function loadContestantLeaderboard(
                         contestant.score
                     );
 
+const inTheBag = String(contestant.score["In the Bag"] || "").trim();
+
+const inTheBagHTML = inTheBag
+    ? `
+        <div class="detail-heading">
+            <span>
+                <i class="fa-solid fa-sack-dollar"></i>
+                IN THE BAG
+            </span>
+        </div>
+
+        <div class="breakdown-list">
+            <div class="breakdown-item">
+                <span>
+                    <i class="fa-solid fa-gift"></i>
+                    ${escapeHTML(inTheBag).replace(/\r?\n/g, "<br>")}
+                </span>
+            </div>
+        </div>
+    `
+    : "";
 
                 const breakdownHTML =
                     breakdown.length
                     ? breakdown.map(item => `
 
-    <div class="breakdown-item">
+                        <div class="breakdown-item">
 
-        <span>
+                            <span>
 
-            <i class="${item.icon}"></i>
+                                <i class="${item.icon}"></i>
 
-            ${escapeHTML(item.label)}
+                                ${escapeHTML(item.label)}
 
-        </span>
+                            </span>
 
-        <strong class="${
-            item.points < 0
-            ? "negative"
-            : ""
-        }">
+                            <strong class="${
+                                item.points < 0
+                                ? "negative"
+                                : ""
+                            }">
 
-            ${formatPoints(item.points)}
+                                ${formatPoints(item.points)}
 
-        </strong>
+                            </strong>
 
-    </div>
+                        </div>
 
-`).join("")
+                    `).join("")
                     : `
 
                         <div class="breakdown-empty">
@@ -1716,12 +2015,35 @@ async function loadContestantLeaderboard(
                     `;
 
 
-                return `
+                const tribeColor =
+                    getTribeColor(
+                        contestant.name,
+                        scores
+                    );
 
+
+                const tribeBars =
+                    tribeColor
+                        ? `
+                            <span
+                                class="tribe-color-bar"
+                                style="background: ${tribeColor};"
+                            ></span>
+                        `
+                        : "";
+
+
+                return `
                     <div
                         class="contestant-row"
                         data-contestant-row="${index}"
                     >
+
+                        <div class="tribe-color-bars">
+
+                            ${tribeBars}
+
+                        </div>
 
                         <button
                             class="contestant-main"
@@ -1765,29 +2087,21 @@ async function loadContestantLeaderboard(
                         </button>
 
 
-                        <div
-                            class="contestant-details"
-                            id="contestant-details-${index}"
-                        >
+<div class="contestant-details" id="contestant-details-${index}">
+    <div class="contestant-detail-inner">
 
-                            <div class="contestant-detail-inner">
+        ${inTheBagHTML}
 
+        <div class="detail-heading" style="margin-top: 4px;">
+            <span>
+                <i class="fa-solid fa-chart-column"></i>
+                EPISODE ${episodeNumber} BREAKDOWN
+            </span>
+        </div>
 
-                                <div class="detail-heading">
-
-                                    <span>
-                                        <i class="fa-solid fa-chart-column"></i>
-                                        EPISODE ${episodeNumber} BREAKDOWN
-                                    </span>
-
-                                </div>
-
-
-                                <div class="breakdown-list">
-
-                                    ${breakdownHTML}
-
-                                </div>
+        <div class="breakdown-list">
+            ${breakdownHTML}
+        </div>
 
 
                                 <div class="detail-total">
@@ -2038,28 +2352,29 @@ async function initializeEpisodePage() {
 
             fetchCSV(DATA_URLS.episodeScores),
 
-    ]);
+        ]);
 
 
         await loadEpisodeDetails();
 
 
-await loadPlayerScoreboard(
-    players,
-    episodeScores
-);
+        await loadPlayerScoreboard(
+            players,
+            contestants,
+            episodeScores
+        );
 
 
-calculateTopScorer(
-    players,
-    episodeScores
-);
+        calculateTopScorer(
+            players,
+            episodeScores
+        );
 
 
-await loadContestantLeaderboard(
-    contestants,
-    episodeScores
-);
+        await loadContestantLeaderboard(
+            contestants,
+            episodeScores
+        );
 
 
         await setupNavigation(
